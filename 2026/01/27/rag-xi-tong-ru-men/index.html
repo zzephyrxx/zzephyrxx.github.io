@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!-- title -->
+<!-- keywords -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="zzephyrxx">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="zzephyrxx">
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    <meta name="description" content="">
+    <meta name="description" content="检索增强生成（Retrieval-Augmented Generation，简称 RAG）是当前大语言模型应用中最重要的技术之一。它通过结合外部知识库和生成模型，解决了纯生成模型存在的知识更新滞后、产生幻觉等问题。 主要内容：  RAG 系统的核心概念和工作原理 从零构建 RAG 系统的完整流程 实战代码示例和最佳实践 RAG 与其他方案的对比分析   🔍 背景知识 为什么需">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RAG系统入门">
+<meta property="og:url" content="http://zzephyrxx.github.io/2026/01/27/rag-xi-tong-ru-men/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="检索增强生成（Retrieval-Augmented Generation，简称 RAG）是当前大语言模型应用中最重要的技术之一。它通过结合外部知识库和生成模型，解决了纯生成模型存在的知识更新滞后、产生幻觉等问题。 主要内容：  RAG 系统的核心概念和工作原理 从零构建 RAG 系统的完整流程 实战代码示例和最佳实践 RAG 与其他方案的对比分析   🔍 背景知识 为什么需">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-01-27T03:24:00.000Z">
+<meta property="article:modified_time" content="2026-01-27T03:25:12.149Z">
+<meta property="article:author" content="zzephyrxx">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="RAG">
+<meta property="article:tag" content="大模型">
+<meta name="twitter:card" content="summary">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/favicon.ico">
+    <title>RAG系统入门 · zzephyrxx&#39;s Studio</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .footer-fixed-btn,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(
+            -45deg,
+            #444 0,
+            #444 80px,
+            #333 80px,
+            #333 160px
+        );
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link id="stylesheet-fancybox" rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-base" rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-mobile" rel="preload" href="/css/mobile.css" as="style" onload="this.onload=null;this.rel='stylesheet';this.media='screen and (max-width: 960px)'">
+    <link id="stylesheet-theme-dark" rel="preload" href="/css/dark.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    <!-- 百度统计  -->
+    <!-- 谷歌统计  -->
+    <!-- Google tag (gtag.js) -->
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+        <body class="post-body">
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        <div class="header-sidebar-menu">
+            <div style="padding-left: 1px;">&#xe775;</div>
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href="/">zzephyrxx's Studio.</a>
+        </span>
+    </div>
+    <!-- toggle banner -->
+    <div class="banner">
+        <div class="blog-title header-element">
+            <a href="/">zzephyrxx&#39;s Studio.</a>
+        </div>
+        <div class="post-title header-element">
+            <a href="#" class="post-name">RAG系统入门</a>
+        </div>
+    </div>
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- donate button -->
+
+    <!-- back to top button -->
+    <div class="footer-fixed-btn footer-fixed-btn--hidden back-top">
+        <div>&#xe639;</div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="    height:50vh;
+">
+    <!-- 主页  -->
+    <!-- 404页  -->
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.png)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+                RAG系统入门
+            <!-- 404 -->
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            <!-- 404 -->
+        </p>
+        <!-- 文章页 meta -->
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                    <div class="post-intro-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="RAG">RAG</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="AI">AI</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="大模型">大模型</a>
+</div>
+
+                <!-- 文章字数统计 -->
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">2.4k</span>阅读时长: <span class="post-count reading-time">10 min</span></span>
+                    </div>
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2026/01/27</span>
+                    <!-- busuanzi -->
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" alt="loading">
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <p>检索增强生成（Retrieval-Augmented Generation，简称 RAG）是当前大语言模型应用中最重要的技术之一。它通过结合外部知识库和生成模型，解决了纯生成模型存在的知识更新滞后、产生幻觉等问题。</p>
+<p><strong>主要内容：</strong></p>
+<ul>
+<li>RAG 系统的核心概念和工作原理</li>
+<li>从零构建 RAG 系统的完整流程</li>
+<li>实战代码示例和最佳实践</li>
+<li>RAG 与其他方案的对比分析</li>
+</ul>
+<hr />
+<h2 id="背景知识">🔍 背景知识</h2>
+<h3 id="为什么需要-rag">为什么需要 RAG？</h3>
+<p>大语言模型（LLM）虽然强大，但存在明显的局限性：</p>
+<ul>
+<li><strong>知识截止</strong>：模型的训练数据有时间限制，无法获取最新信息</li>
+<li><strong>幻觉问题</strong>：模型可能会编造不存在的事实</li>
+<li><strong>私有数据</strong>：无法直接访问企业内部的私有知识库</li>
+</ul>
+<p>RAG 技术通过在生成答案前检索相关文档，有效解决了这些问题，让 LLM 能够访问最新的、准确的外部知识。</p>
+<h3 id="核心概念">核心概念</h3>
+<table>
+<thead>
+<tr class="header">
+<th>术语</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>RAG</td>
+<td>检索增强生成，结合检索和生成两种技术的混合方法</td>
+</tr>
+<tr class="even">
+<td>向量嵌入</td>
+<td>将文本转换为数值向量的过程，用于语义相似度计算</td>
+</tr>
+<tr class="odd">
+<td>向量数据库</td>
+<td>专门存储和检索向量数据的数据库系统</td>
+</tr>
+<tr class="even">
+<td>Chunking</td>
+<td>将长文档切分成小块，提高检索和处理的效率</td>
+</tr>
+<tr class="odd">
+<td>重排序</td>
+<td>对检索结果进行重新排序，提高相关性</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="技术原理">🏗️ 技术原理</h2>
+<h3 id="整体架构">整体架构</h3>
+<p>RAG 系统的核心架构包含三个主要组件：文档处理、向量检索和生成回答。</p>
+<pre class="mermaid">graph TB
+    subgraph 文档处理
+        A[原始文档] --> B[文本切分]
+        B --> C[向量化]
+        C --> D[(向量数据库)]
+    end
+
+    subgraph 查询处理
+        E[用户问题] --> F[问题向量化]
+    end
+
+    subgraph 检索生成
+        F --> G[向量检索]
+        D --> G
+        G --> H[上下文组装]
+        H --> I[LLM 生成]
+        I --> J[最终答案]
+    end
+
+    style A fill:#e1f5ff
+    style D fill:#ffe1e1
+    style I fill:#e1ffe1</pre>
+<h3 id="工作流程">工作流程</h3>
+<p>RAG 系统的工作流程可以分为五个主要步骤：</p>
+<pre class="mermaid">flowchart LR
+    A[文档加载] --> B[文本切分]
+    B --> C[向量嵌入]
+    C --> D[存储到向量数据库]
+    E[用户查询] --> F[查询向量化]
+    F --> G[相似度检索]
+    G --> H[上下文组装]
+    H --> I[LLM 生成答案]
+
+    style A fill:#e1f5ff
+    style E fill:#fff4e1
+    style I fill:#e1ffe1</pre>
+<hr />
+<h2 id="代码实现">💻 代码实现</h2>
+<h3 id="环境准备">环境准备</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装必要的依赖</span></span><br><span class="line">pip install langchain langchain-openai chromadb</span><br><span class="line">pip install python-dotenv tiktoken</span><br></pre></td></tr></table></figure>
+<h3 id="文档处理">文档处理</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.text_splitter <span class="keyword">import</span> RecursiveCharacterTextSplitter</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> OpenAIEmbeddings</span><br><span class="line"><span class="keyword">from</span> langchain.vectorstores <span class="keyword">import</span> Chroma</span><br><span class="line"><span class="keyword">from</span> langchain.document_loaders <span class="keyword">import</span> TextLoader</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DocumentProcessor</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;文档处理类：负责加载、切分和向量化文档&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, chunk_size=<span class="number">1000</span>, chunk_overlap=<span class="number">200</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.chunk_size = chunk_size</span><br><span class="line">        <span class="variable language_">self</span>.chunk_overlap = chunk_overlap</span><br><span class="line">        <span class="variable language_">self</span>.text_splitter = RecursiveCharacterTextSplitter(</span><br><span class="line">            chunk_size=chunk_size,</span><br><span class="line">            chunk_overlap=chunk_overlap,</span><br><span class="line">            length_function=<span class="built_in">len</span>,</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">load_document</span>(<span class="params">self, file_path</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;加载文档&quot;&quot;&quot;</span></span><br><span class="line">        loader = TextLoader(file_path)</span><br><span class="line">        documents = loader.load()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;加载了 <span class="subst">&#123;<span class="built_in">len</span>(documents)&#125;</span> 个文档&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> documents</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">split_documents</span>(<span class="params">self, documents</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;切分文档&quot;&quot;&quot;</span></span><br><span class="line">        chunks = <span class="variable language_">self</span>.text_splitter.split_documents(documents)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;切分后得到 <span class="subst">&#123;<span class="built_in">len</span>(chunks)&#125;</span> 个文本块&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> chunks</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">create_vector_store</span>(<span class="params">self, chunks</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;创建向量数据库&quot;&quot;&quot;</span></span><br><span class="line">        embeddings = OpenAIEmbeddings()</span><br><span class="line">        vector_store = Chroma.from_documents(</span><br><span class="line">            documents=chunks,</span><br><span class="line">            embedding=embeddings,</span><br><span class="line">            persist_directory=<span class="string">&quot;./chroma_db&quot;</span></span><br><span class="line">        )</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;向量数据库创建成功&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> vector_store</span><br></pre></td></tr></table></figure>
+<h3 id="检索与生成">检索与生成</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> langchain.chains <span class="keyword">import</span> RetrievalQA</span><br><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> PromptTemplate</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RAGSystem</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;RAG 系统类：负责检索和生成答案&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, vector_store</span>):</span><br><span class="line">        <span class="variable language_">self</span>.vector_store = vector_store</span><br><span class="line">        <span class="variable language_">self</span>.retriever = vector_store.as_retriever(</span><br><span class="line">            search_type=<span class="string">&quot;similarity&quot;</span>,</span><br><span class="line">            search_kwargs=&#123;<span class="string">&quot;k&quot;</span>: <span class="number">3</span>&#125;</span><br><span class="line">        )</span><br><span class="line">        <span class="variable language_">self</span>.llm = ChatOpenAI(</span><br><span class="line">            model_name=<span class="string">&quot;gpt-3.5-turbo&quot;</span>,</span><br><span class="line">            temperature=<span class="number">0</span></span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">create_prompt_template</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;创建提示词模板&quot;&quot;&quot;</span></span><br><span class="line">        template = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        使用以下上下文片段来回答用户的问题。如果你不知道答案，就说不知道，不要编造答案。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        上下文：</span></span><br><span class="line"><span class="string">        &#123;context&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        问题：&#123;question&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        答案：</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> PromptTemplate(</span><br><span class="line">            template=template,</span><br><span class="line">            input_variables=[<span class="string">&quot;context&quot;</span>, <span class="string">&quot;question&quot;</span>]</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">create_qa_chain</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;创建问答链&quot;&quot;&quot;</span></span><br><span class="line">        prompt = <span class="variable language_">self</span>.create_prompt_template()</span><br><span class="line">        chain_type_kwargs = &#123;<span class="string">&quot;prompt&quot;</span>: prompt&#125;</span><br><span class="line"></span><br><span class="line">        qa_chain = RetrievalQA.from_chain_type(</span><br><span class="line">            llm=<span class="variable language_">self</span>.llm,</span><br><span class="line">            chain_type=<span class="string">&quot;stuff&quot;</span>,</span><br><span class="line">            retriever=<span class="variable language_">self</span>.retriever,</span><br><span class="line">            chain_type_kwargs=chain_type_kwargs,</span><br><span class="line">            return_source_documents=<span class="literal">True</span></span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">return</span> qa_chain</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">query</span>(<span class="params">self, question</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;查询并返回答案&quot;&quot;&quot;</span></span><br><span class="line">        qa_chain = <span class="variable language_">self</span>.create_qa_chain()</span><br><span class="line">        result = qa_chain(&#123;<span class="string">&quot;query&quot;</span>: question&#125;)</span><br><span class="line">        <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+<h3 id="完整示例">完整示例</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="string">&quot;&quot;&quot;主函数：演示完整的 RAG 流程&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 加载环境变量</span></span><br><span class="line">    load_dotenv()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 检查 API Key</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.getenv(<span class="string">&quot;OPENAI_API_KEY&quot;</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;请设置 OPENAI_API_KEY 环境变量&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;=&quot;</span> * <span class="number">60</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;RAG 系统演示&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;=&quot;</span> * <span class="number">60</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 步骤 1: 处理文档</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n[步骤 1] 处理文档...&quot;</span>)</span><br><span class="line">    processor = DocumentProcessor()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 假设我们有一个知识库文档</span></span><br><span class="line">    documents = processor.load_document(<span class="string">&quot;knowledge_base.txt&quot;</span>)</span><br><span class="line">    chunks = processor.split_documents(documents)</span><br><span class="line">    vector_store = processor.create_vector_store(chunks)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 步骤 2: 初始化 RAG 系统</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n[步骤 2] 初始化 RAG 系统...&quot;</span>)</span><br><span class="line">    rag_system = RAGSystem(vector_store)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 步骤 3: 查询示例</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n[步骤 3] 开始查询...&quot;</span>)</span><br><span class="line">    questions = [</span><br><span class="line">        <span class="string">&quot;什么是 RAG？&quot;</span>,</span><br><span class="line">        <span class="string">&quot;RAG 有哪些优势？&quot;</span>,</span><br><span class="line">        <span class="string">&quot;如何构建一个 RAG 系统？&quot;</span></span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i, question <span class="keyword">in</span> <span class="built_in">enumerate</span>(questions, <span class="number">1</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;\n问题 <span class="subst">&#123;i&#125;</span>: <span class="subst">&#123;question&#125;</span>&quot;</span>)</span><br><span class="line">        result = rag_system.query(question)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;\n答案：<span class="subst">&#123;result[<span class="string">&#x27;result&#x27;</span>]&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;\n参考文档：&quot;</span>)</span><br><span class="line">        <span class="keyword">for</span> idx, doc <span class="keyword">in</span> <span class="built_in">enumerate</span>(result[<span class="string">&#x27;source_documents&#x27;</span>], <span class="number">1</span>):</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;  <span class="subst">&#123;idx&#125;</span>. <span class="subst">&#123;doc.metadata.get(<span class="string">&#x27;source&#x27;</span>, <span class="string">&#x27;unknown&#x27;</span>)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n&quot;</span> + <span class="string">&quot;=&quot;</span> * <span class="number">60</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;演示完成！&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;=&quot;</span> * <span class="number">60</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="实践案例">📊 实践案例</h2>
+<h3 id="案例一企业知识库问答">案例一：企业知识库问答</h3>
+<p><strong>场景描述：</strong> 一家大型企业拥有大量的技术文档、产品手册和操作指南，员工在查找信息时需要花费大量时间。使用 RAG 系统可以快速提供准确的答案。</p>
+<p><strong>解决方案：</strong></p>
+<ol type="1">
+<li>收集企业所有文档（PDF、Word、网页等）</li>
+<li>将文档向量化存储到向量数据库</li>
+<li>员工通过自然语言提问，系统快速检索相关文档并生成答案</li>
+</ol>
+<p><strong>实施步骤：</strong></p>
+<ol type="1">
+<li>使用 LangChain 的文档加载器加载不同格式的文档</li>
+<li>对长文档进行智能切分</li>
+<li>选择合适的向量数据库（如 Chroma、Pinecone）</li>
+<li>配置 LLM（如 GPT-4）进行答案生成</li>
+<li>添加来源引用，提高可信度</li>
+</ol>
+<p><strong>效果对比：</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>指标</th>
+<th>传统搜索</th>
+<th>RAG 系统</th>
+<th>提升</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>查询时间</td>
+<td>5-10 分钟</td>
+<td>10-30 秒</td>
+<td>90%+</td>
+</tr>
+<tr class="even">
+<td>答案准确性</td>
+<td>60-70%</td>
+<td>85-95%</td>
+<td>+25%</td>
+</tr>
+<tr class="odd">
+<td>用户满意度</td>
+<td>3.5/5</td>
+<td>4.5/5</td>
+<td>+28%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="技术对比">🔬 技术对比</h2>
+<h3 id="rag-vs-其他方案">RAG vs 其他方案</h3>
+<table>
+<thead>
+<tr class="header">
+<th>特性</th>
+<th>纯 LLM</th>
+<th>RAG</th>
+<th>微调 (Fine-tuning)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>知识更新</td>
+<td>❌ 困难</td>
+<td>✅ 容易</td>
+<td>⚠️ 需要重训练</td>
+</tr>
+<tr class="even">
+<td>准确性</td>
+<td>⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr class="odd">
+<td>成本</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐</td>
+</tr>
+<tr class="even">
+<td>实施难度</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐</td>
+</tr>
+<tr class="odd">
+<td>可解释性</td>
+<td>⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+</tr>
+</tbody>
+</table>
+<h3 id="适用场景分析">适用场景分析</h3>
+<pre class="mermaid">pie showData
+    title RAG 在企业中的应用分布
+    "知识库问答" : 35
+    "文档搜索" : 25
+    "客服系统" : 20
+    "代码辅助" : 15
+    "其他" : 5</pre>
+<hr />
+<h2 id="最佳实践">⚙️ 最佳实践</h2>
+<h3 id="文档处理建议">文档处理建议</h3>
+<ol type="1">
+<li><strong>合理的 Chunk 大小</strong>
+<ul>
+<li>通常 500-1000 tokens 比较合适</li>
+<li>重叠 10-20% 避免信息丢失</li>
+<li>考虑文档结构（段落、章节）</li>
+</ul></li>
+<li><strong>选择合适的嵌入模型</strong>
+<ul>
+<li>OpenAI <code>text-embedding-ada-002</code>：通用性强</li>
+<li>BGE/M3E：中文场景表现好</li>
+<li>根据任务需求选择模型大小</li>
+</ul></li>
+<li><strong>元数据管理</strong>
+<ul>
+<li>保留文档来源、页码等元数据</li>
+<li>用于结果追踪和来源标注</li>
+</ul></li>
+</ol>
+<h3 id="检索优化">检索优化</h3>
+<p>❌ <strong>不要这样做：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 只使用简单相似度检索</span></span><br><span class="line">retriever = vector_store.as_retriever(search_kwargs=&#123;<span class="string">&quot;k&quot;</span>: <span class="number">5</span>&#125;)</span><br></pre></td></tr></table></figure>
+<p>✅ <strong>推荐做法：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用混合检索（相似度 + 重排序）</span></span><br><span class="line">retriever = vector_store.as_retriever(</span><br><span class="line">    search_type=<span class="string">&quot;mmr&quot;</span>,  <span class="comment"># 最大边际相关性</span></span><br><span class="line">    search_kwargs=&#123;</span><br><span class="line">        <span class="string">&quot;k&quot;</span>: <span class="number">5</span>,</span><br><span class="line">        <span class="string">&quot;fetch_k&quot;</span>: <span class="number">20</span>  <span class="comment"># 先检索更多，再重排序</span></span><br><span class="line">    &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="性能优化">性能优化</h3>
+<table>
+<thead>
+<tr class="header">
+<th>优化点</th>
+<th>方法</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>检索速度</td>
+<td>使用近似搜索 (HNSW)</td>
+<td>10-100x 加速</td>
+</tr>
+<tr class="even">
+<td>内存占用</td>
+<td>向量量化 (INT8)</td>
+<td>减少 50%+ 内存</td>
+</tr>
+<tr class="odd">
+<td>响应延迟</td>
+<td>流式输出</td>
+<td>改善用户体验</td>
+</tr>
+<tr class="even">
+<td>准确性</td>
+<td>重排序 (Reranking)</td>
+<td>提升 10-20%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="进阶话题">🚀 进阶话题</h2>
+<h3 id="高级特性">高级特性</h3>
+<h4 id="多模态-rag">1. 多模态 RAG</h4>
+<p>支持检索文本、图片、表格等多种类型的内容，适用于更复杂的应用场景。</p>
+<h4 id="查询重写">2. 查询重写</h4>
+<p>对用户的查询进行重写和扩展，提高检索的相关性：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用 LLM 重写查询</span></span><br><span class="line">rewrite_prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">重写以下查询，使其更适合向量检索：</span></span><br><span class="line"><span class="string">原始查询：<span class="subst">&#123;user_query&#125;</span></span></span><br><span class="line"><span class="string">重写后的查询：</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+<h4 id="自适应检索">3. 自适应检索</h4>
+<p>根据查询的难度动态调整检索策略：</p>
+<ul>
+<li>简单查询：检索较少文档</li>
+<li>复杂查询：检索更多文档并进行迭代检索</li>
+</ul>
+<h3 id="扩展应用">扩展应用</h3>
+<ul>
+<li><strong>多轮对话</strong>：结合对话历史进行上下文检索</li>
+<li><strong>代理集成</strong>：与 AI Agent 结合，支持复杂任务</li>
+<li><strong>实时更新</strong>：增量更新向量数据库</li>
+</ul>
+<h3 id="未来发展">未来发展</h3>
+<pre class="mermaid">timeline
+    title RAG 技术发展路线
+    section 2024
+        基础 RAG : 单轮问答系统
+    section 2025
+        多模态 RAG : 文本+图像检索
+    section 2026
+        自适应 RAG : 智能检索策略
+    section 2027
+        实时 RAG : 增量更新和流式处理</pre>
+<hr />
+<h2 id="参考资料">📚 参考资料</h2>
+<h3 id="官方文档">官方文档</h3>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://python.langchain.com/">LangChain 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://platform.openai.com/docs">OpenAI API 文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.trychroma.com/">ChromaDB 文档</a></li>
+</ul>
+<h3 id="相关论文">相关论文</h3>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2005.11401">Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2310.07732">Scaling RAG with LlamaIndex</a></li>
+</ul>
+<h3 id="开源项目">开源项目</h3>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langchain">LangChain</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/run-llama/llama_index">LlamaIndex</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/chroma-core/chroma">ChromaDB</a></li>
+</ul>
+<h3 id="推荐阅读">推荐阅读</h3>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.deeplearning.ai/short-courses/">Building Production-Ready RAG Applications</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.langchain.dev/">Advanced RAG Techniques</a></li>
+</ul>
+<hr />
+<h2 id="总结">💎 总结</h2>
+<h3 id="核心要点">核心要点</h3>
+<p>✅ <strong>要点1：</strong> RAG 通过结合检索和生成，解决了纯 LLM 的知识更新和幻觉问题 ✅ <strong>要点2：</strong> 文档处理、向量检索和生成是 RAG 的三大核心组件 ✅ <strong>要点3：</strong> 合理的切分、嵌入和检索策略是构建高质量 RAG 系统的关键</p>
+<h3 id="适用场景">适用场景</h3>
+<p>本技术适用于：</p>
+<ul>
+<li>企业知识库问答系统</li>
+<li>文档智能搜索</li>
+<li>客服自动化</li>
+<li>代码辅助开发</li>
+<li>学习资料检索</li>
+</ul>
+<h3 id="学习路径">学习路径</h3>
+<pre class="mermaid">flowchart LR
+    A[基础概念] --> B[向量数据库]
+    B --> C[LangChain 框架]
+    C --> D[构建 RAG 系统]
+    D --> E[性能优化]
+    E --> F[高级应用]
+    style A fill:#e1f5ff
+    style F fill:#ffe1e1</pre>
+
+    </article>
+    <!-- license -->
+        <div class="license-wrapper">
+            <p>原文作者：<a href="http://zzephyrxx.github.io">zzephyrxx</a>
+            <p>原文链接：<a href="http://zzephyrxx.github.io/2026/01/27/rag-xi-tong-ru-men/">http://zzephyrxx.github.io/2026/01/27/rag-xi-tong-ru-men/</a>
+            <p>发表日期：<a href="http://zzephyrxx.github.io/2026/01/27/rag-xi-tong-ru-men/">January 27th 2026, 11:24:00 am</a>
+            <p>更新日期：<a href="http://zzephyrxx.github.io/2026/01/27/rag-xi-tong-ru-men/">January 27th 2026, 11:25:12 am</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+        </li>
+        <li class="previous">
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2026/01/24/mark-tilbury-de-50-tiao-ren-sheng-jian-yi/" title="Mark Tilbury的50条人生建议">
+                    <div class="prevTitle">Mark Tilbury的50条人生建议</div>
+                </a>
+        </li>
+    </ul>
+    <!-- comment -->
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+            
+            
+            
+            <!-- utteranc评论 -->
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+            
+            
+            
+        </div>
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    <!-- Mathjax -->
+</main>
+
+                <!-- profile -->
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+        <div class="social">
+                            <a href="mailto:yurou_z@163.com" class="iconfont-archer email" title="email" ></a>
+                <a href="//github.com/zzephyrxx" class="iconfont-archer github" target="_blank" title="github"></a>
+                <span class="iconfont-archer wechat" title="wechat">
+                    <img class="profile-qr" src="/assets/wechat_qr.png" />
+                </span>
+
+        </div>
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span>
+    <!-- website approve for Chinese user -->
+    <!---->
+    <!-- 不蒜子  -->
+        <div class="busuanzi-container">
+                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+        </div>
+</footer>
+
+        </div>
+        <!-- toc -->
+            <div class="toc-wrapper toc-wrapper-loding" style=    top:50vh;
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF%E7%9F%A5%E8%AF%86"><span class="toc-number">1.</span> <span class="toc-text">🔍 背景知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-rag"><span class="toc-number">1.1.</span> <span class="toc-text">为什么需要 RAG？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">1.2.</span> <span class="toc-text">核心概念</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">🏗️ 技术原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text">整体架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-number">2.2.</span> <span class="toc-text">工作流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text">💻 代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">3.1.</span> <span class="toc-text">环境准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E6%A1%A3%E5%A4%84%E7%90%86"><span class="toc-number">3.2.</span> <span class="toc-text">文档处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E7%B4%A2%E4%B8%8E%E7%94%9F%E6%88%90"><span class="toc-number">3.3.</span> <span class="toc-text">检索与生成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B"><span class="toc-number">3.4.</span> <span class="toc-text">完整示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E8%B7%B5%E6%A1%88%E4%BE%8B"><span class="toc-number">4.</span> <span class="toc-text">📊 实践案例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B%E4%B8%80%E4%BC%81%E4%B8%9A%E7%9F%A5%E8%AF%86%E5%BA%93%E9%97%AE%E7%AD%94"><span class="toc-number">4.1.</span> <span class="toc-text">案例一：企业知识库问答</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E5%AF%B9%E6%AF%94"><span class="toc-number">5.</span> <span class="toc-text">🔬 技术对比</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#rag-vs-%E5%85%B6%E4%BB%96%E6%96%B9%E6%A1%88"><span class="toc-number">5.1.</span> <span class="toc-text">RAG vs 其他方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF%E5%88%86%E6%9E%90"><span class="toc-number">5.2.</span> <span class="toc-text">适用场景分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-number">6.</span> <span class="toc-text">⚙️ 最佳实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E6%A1%A3%E5%A4%84%E7%90%86%E5%BB%BA%E8%AE%AE"><span class="toc-number">6.1.</span> <span class="toc-text">文档处理建议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E7%B4%A2%E4%BC%98%E5%8C%96"><span class="toc-number">6.2.</span> <span class="toc-text">检索优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">6.3.</span> <span class="toc-text">性能优化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E9%98%B6%E8%AF%9D%E9%A2%98"><span class="toc-number">7.</span> <span class="toc-text">🚀 进阶话题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7"><span class="toc-number">7.1.</span> <span class="toc-text">高级特性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E6%A8%A1%E6%80%81-rag"><span class="toc-number">7.1.1.</span> <span class="toc-text">1. 多模态 RAG</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E9%87%8D%E5%86%99"><span class="toc-number">7.1.2.</span> <span class="toc-text">2. 查询重写</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E9%80%82%E5%BA%94%E6%A3%80%E7%B4%A2"><span class="toc-number">7.1.3.</span> <span class="toc-text">3. 自适应检索</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E5%BA%94%E7%94%A8"><span class="toc-number">7.2.</span> <span class="toc-text">扩展应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AA%E6%9D%A5%E5%8F%91%E5%B1%95"><span class="toc-number">7.3.</span> <span class="toc-text">未来发展</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">8.</span> <span class="toc-text">📚 参考资料</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3"><span class="toc-number">8.1.</span> <span class="toc-text">官方文档</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E8%AE%BA%E6%96%87"><span class="toc-number">8.2.</span> <span class="toc-text">相关论文</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE"><span class="toc-number">8.3.</span> <span class="toc-text">开源项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB"><span class="toc-number">8.4.</span> <span class="toc-text">推荐阅读</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">9.</span> <span class="toc-text">💎 总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E8%A6%81%E7%82%B9"><span class="toc-number">9.1.</span> <span class="toc-text">核心要点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">9.2.</span> <span class="toc-text">适用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E8%B7%AF%E5%BE%84"><span class="toc-number">9.3.</span> <span class="toc-text">学习路径</span></a></li></ol></li></ol>
+            </div>
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+        
+        
+        
+        
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 4
+        </div>
+        <!-- search  -->
+    </div>
+    <div class="post-archive">
+            <div class="archive-year"> 2026 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span>
+            <a class="archive-post-title" href="/2026/01/27/rag-xi-tong-ru-men/">RAG系统入门</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span>
+            <a class="archive-post-title" href="/2026/01/24/mark-tilbury-de-50-tiao-ren-sheng-jian-yi/">Mark Tilbury的50条人生建议</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span>
+            <a class="archive-post-title" href="/2026/01/24/nano-banana-pro-hui-tu-jiao-cheng/">Nano-Banana Pro绘图教程</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span>
+            <a class="archive-post-title" href="/2026/01/23/shi-ban-semidone-ji-jian-zhuo-mian-dai-ban-app/">事半·SemiDone极简桌面代办APP</a>
+        </li>
+            </ul>
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+            <span class="sidebar-tag-name" data-tags="YouTube">
+                <span class="iconfont-archer">&#xe606;</span>
+                YouTube
+            </span>
+            <span class="sidebar-tag-name" data-tags="人生经验">
+                <span class="iconfont-archer">&#xe606;</span>
+                人生经验
+            </span>
+            <span class="sidebar-tag-name" data-tags="SemiDone">
+                <span class="iconfont-archer">&#xe606;</span>
+                SemiDone
+            </span>
+            <span class="sidebar-tag-name" data-tags="软件分享">
+                <span class="iconfont-archer">&#xe606;</span>
+                软件分享
+            </span>
+            <span class="sidebar-tag-name" data-tags="搬运">
+                <span class="iconfont-archer">&#xe606;</span>
+                搬运
+            </span>
+            <span class="sidebar-tag-name" data-tags="AI绘图">
+                <span class="iconfont-archer">&#xe606;</span>
+                AI绘图
+            </span>
+            <span class="sidebar-tag-name" data-tags="RAG">
+                <span class="iconfont-archer">&#xe606;</span>
+                RAG
+            </span>
+            <span class="sidebar-tag-name" data-tags="AI">
+                <span class="iconfont-archer">&#xe606;</span>
+                AI
+            </span>
+            <span class="sidebar-tag-name" data-tags="大模型">
+                <span class="iconfont-archer">&#xe606;</span>
+                大模型
+            </span>
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+        <span class="sidebar-category-name" data-categories="软件分享">
+            <span class="iconfont-archer">&#xe60a;</span>
+            软件分享
+        </span>
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "http://zzephyrxx.github.io",
+        root: siteMetaRoot,
+        author: "zzephyrxx"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+        <!-- main func -->
+        <script src="/scripts/main.js"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js" onload="window.Fancybox.bind('[data-fancybox]')" defer></script>
+        <!-- algolia -->
+        <!-- busuanzi -->
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        <!-- async load share.js -->
+            <script src="/scripts/share.js" async></script>
+        <!-- mermaid -->
+            <script src='https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js' onload="window.mermaid.initialize({theme: 'dark'})" async></script>
+    </body>
+</html>
