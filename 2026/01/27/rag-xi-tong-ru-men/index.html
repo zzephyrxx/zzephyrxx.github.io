@@ -214,7 +214,7 @@
     <script type="text/javascript">
         if (typeof window.$ == undefined) {
             console.warn('jquery load from jsdelivr failed, will load local script')
-            document.write('<script src="/lib/jquery.min.js" />')
+            document.write('<script src="/lib/jquery.min.js"><\/script>')
         }
     </script>
         <body class="post-body">
@@ -1017,8 +1017,8 @@
         <!-- async load share.js -->
             <script src="/scripts/share.js" async></script>
         <!-- mermaid -->
-            <script src='https://cdn.jsdelivr.net/npm/mermaid@10.4.0/dist/mermaid.min.js' async></script>
-            <script src='/scripts/custom-mermaid.js' async></script>
+            <script src='https://cdn.jsdelivr.net/npm/mermaid@10.4.0/dist/mermaid.min.js' defer></script>
+            <script src='/scripts/custom-mermaid.js' defer></script>
         <!-- Code Block Beautification -->
         <script src="/lib/codeBlock/codeBlockFuction.js"></script>
         <script src="/lib/codeBlock/codeBLang.js"></script>

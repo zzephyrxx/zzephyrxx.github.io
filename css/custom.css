@@ -178,6 +178,10 @@
     pointer-events: none;
 }
 
+/* Mermaid: transparent background and centering */
 .article-entry .mermaid {
   background: transparent !important;
+  display: flex;
+  justify-content: center;
+  margin: 1.5em 0;
 }
