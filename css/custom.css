@@ -51,6 +51,17 @@
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
 }
 
+.article-entry figure.highlight table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 0;
+}
+.article-entry figure.highlight td {
+  padding: 0;
+  vertical-align: top;
+}
+
 /* Top bar of code block */
 .article-entry figure.highlight:before {
   content: "";
@@ -58,7 +69,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 30px;
+  height: 26px;
   background-color: #21252b;
   z-index: 1;
   border-radius: 6px 6px 0 0;
@@ -69,7 +80,7 @@
 .article-entry figure.highlight:after {
   content: "";
   position: absolute;
-  top: 12px; /* Adjusted to match new title bar height */
+  top: 10px; /* Adjusted to match new title bar height */
   left: 15px;
   width: 12px;
   height: 12px;
@@ -83,271 +94,90 @@
   position: relative;
   background-color: #282c34;
   margin: 0;
-  padding: 50px 0 15px; /* Further increased top padding to prevent cut-off */
+  padding: 0; 
   overflow: hidden;
   font-size: 14px;
+  color: #abb2bf;
 }
 
 /* Line numbers container */
 .article-entry figure.highlight pre {
   margin: 0;
   padding-left: 0;
+  border: none;
 }
 
 /* Line numbers styling */
 .article-entry figure.highlight .gutter {
-  position: absolute;
-  left: 0;
-  top: 35px; /* Updated to match new title bar height */
-  bottom: 0;
-  width: 40px;
-  background-color: #21252b;
-  border-right: 1px solid #181a1f;
-  padding-top: 20px; /* Increased top padding to match code content */
+  width: 36px; /* Fixed width for gutter */
+  background-color: #282c34;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
   user-select: none;
 }
 
 .article-entry figure.highlight .gutter pre {
-  padding: 0;
-  margin: 0;
-  text-align: center;
-}
-
-.article-entry figure.highlight .gutter .line {
   color: #636d83;
-  font-size: 12px;
-  line-height: 1.6;
-  display: block;
-  padding: 0 3px;
   text-align: right;
+  padding-right: 10px;
+  padding-left: 0;
+  padding-top: 26px;
+  line-height: 1.6;
 }
 
-/* Code content styling */
 .article-entry figure.highlight .code {
-  padding-left: 50px; /* Space for line numbers */
-  padding-top: 20px; /* Further increased top padding */
-  padding-right: 15px;
-  padding-bottom: 10px;
-  overflow-x: auto;
+  padding-top: 26px;
+  width: 100%;
 }
 
-/* Adjust spacing for better readability */
-.article-entry figure.highlight .code .line {
-  min-height: 1.6em;
-  line-height: 1.6;
-}
-
-/* Fix for first line being cut off */
-.article-entry figure.highlight .code .line:first-child {
-  margin-top: 5px; /* Add margin to the first line to prevent cut-off */
-  padding-top: 5px;
-}
-
-/* Code pre styling */
 .article-entry figure.highlight .code pre {
-  padding: 5px 0 0 0;
-  background-color: transparent;
-}
-
-.article-entry pre code {
-  background-color: transparent;
-  color: #abb2bf;
-  font-size: 14px;
+  padding-left: 8px;
+  padding-top: 0;
   line-height: 1.6;
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-  display: block;
 }
 
-/* Inline code styling */
-.article-entry code {
-  background-color: rgba(0, 0, 0, 0.04);
-  border-radius: 3px;
-  padding: 2px 5px;
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-}
-
-/* Syntax highlighting colors - matching the example image */
-.article-entry .comment, 
-.article-entry figure.highlight .comment { color: #5c6370; font-style: italic; }
-
-.article-entry .keyword,
-.article-entry figure.highlight .keyword { color: #c678dd; }
-
-.article-entry .string,
-.article-entry figure.highlight .string { color: #98c379; }
-
-.article-entry .number,
-.article-entry figure.highlight .number { color: #d19a66; }
-
-.article-entry .function,
-.article-entry figure.highlight .function { color: #61afef; }
-
-.article-entry .tag,
-.article-entry figure.highlight .tag { color: #e06c75; }
-
-.article-entry .attr,
-.article-entry figure.highlight .attr { color: #d19a66; }
-
-.article-entry .built_in,
-.article-entry figure.highlight .built_in { color: #56b6c2; }
-
-.article-entry .params,
-.article-entry figure.highlight .params { color: #abb2bf; }
-
-.article-entry .variable,
-.article-entry figure.highlight .variable { color: #e06c75; }
-
-.article-entry .operator,
-.article-entry figure.highlight .operator { color: #56b6c2; }
-
-.article-entry .property,
-.article-entry figure.highlight .property { color: #e06c75; }
-
-/* Special styling for the example in the image */
-.article-entry figure.highlight .line .title { color: #61afef; }
-.article-entry figure.highlight .line .attr { color: #98c379; }
-.article-entry figure.highlight .line .string { color: #98c379; }
-.article-entry figure.highlight .line .comment { color: #5c6370; font-style: italic; }
-
-/* Python specific styling */
-.article-entry figure.highlight.python .line .keyword,
-.article-entry figure.highlight .line .keyword { color: #c678dd; }
-.article-entry figure.highlight.python .line .built_in,
-.article-entry figure.highlight .line .built_in { color: #56b6c2; }
-.article-entry figure.highlight.python .line .string,
-.article-entry figure.highlight .line .string { color: #98c379; }
-.article-entry figure.highlight.python .line .number,
-.article-entry figure.highlight .line .number { color: #d19a66; }
-.article-entry figure.highlight.python .line .params,
-.article-entry figure.highlight .line .params { color: #d19a66; }
-
-/* Specific styling for the example in your image */
-.article-entry figure.highlight .line .name { color: #61afef; }
-.article-entry figure.highlight .line .attr { color: #98c379; }
-.article-entry figure.highlight .line .meta { color: #61afef; }
-.article-entry figure.highlight .line .symbol { color: #98c379; }
-
-/* Code block language indicator */
-.article-entry figure.highlight:before {
-  content: "code";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 35px; /* Increased height for title bar */
+/* Scrollbar styling */
+.article-entry figure.highlight::-webkit-scrollbar {
+  height: 8px;
   background-color: #21252b;
-  z-index: 1;
-  border-radius: 6px 6px 0 0;
-  border-bottom: 1px solid #181a1f;
-  color: #999;
-  font-size: 12px;
-  line-height: 35px; /* Adjusted line height */
-  text-align: center;
-  font-family: var(--base-font-family);
 }
 
-/* Language specific labels */
-.article-entry figure.highlight.python:before { content: "python"; }
-.article-entry figure.highlight.js:before { content: "javascript"; }
-.article-entry figure.highlight.html:before { content: "html"; }
-.article-entry figure.highlight.css:before { content: "css"; }
-.article-entry figure.highlight.bash:before { content: "bash"; }
-.article-entry figure.highlight.json:before { content: "json"; }
-.article-entry figure.highlight.yml:before { content: "yaml"; }
-.article-entry figure.highlight.md:before { content: "markdown"; }
-
-/* ===== Mermaid Hand-drawn Style ===== */
-.mermaid {
-  background-color: transparent !important;
-  margin: 1.5em auto;
-  text-align: center;
+.article-entry figure.highlight::-webkit-scrollbar-thumb {
+  background-color: #4b5363;
+  border-radius: 4px;
 }
 
-/* Override Mermaid default styles for hand-drawn look */
-:root {
-  --mermaid-font-family: "Comic Sans MS", "Comic Neue", cursive;
+/* ===== Code Block Beautification (Copy & Language & Shrink) ===== */
+.code_copy {
+    position: absolute;
+    top: 4px;
+    right: 10px;
+    color: #888;
+    cursor: pointer;
+    font-size: 14px;
+    z-index: 10;
+    transition: all 0.2s ease;
 }
 
-/* Apply custom Mermaid theme */
-.mermaid .node rect,
-.mermaid .node circle,
-.mermaid .node ellipse,
-.mermaid .node polygon,
-.mermaid .node path {
-  stroke-width: 2px !important;
-  stroke: #333 !important;
-  fill: rgba(255, 255, 255, 0.7) !important;
+.code_copy:hover {
+    color: #fff;
+    transform: scale(1.1);
 }
 
-.mermaid .edgePath .path {
-  stroke-width: 2px !important;
-  stroke: #333 !important;
+.code_lang {
+    position: absolute;
+    top: 4px;
+    right: 35px;
+    color: #888;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 10;
+    line-height: 1.2;
+    padding-right: 10px;
+    border-right: 1px solid #444;
+    text-transform: uppercase;
+    pointer-events: none;
 }
 
-.mermaid .cluster rect {
-  stroke-width: 2px !important;
-  stroke: #333 !important;
-  fill: rgba(240, 240, 255, 0.5) !important;
-}
-
-.mermaid .label {
-  font-family: var(--mermaid-font-family) !important;
-  color: #333 !important;
-}
-
-/* Dark mode adjustments */
-.dark-theme .article-entry pre {
-  background-color: #282c34;
-}
-
-.dark-theme .article-entry pre code {
-  color: #abb2bf;
-}
-
-.dark-theme .article-entry code {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #e6e6e6;
-}
-
-.dark-theme .article-entry table thead {
-  background-color: rgba(100, 100, 255, 0.2);
-}
-
-.dark-theme .article-entry table th {
-  color: #e6e6e6;
-  border-bottom: 2px solid rgba(100, 100, 255, 0.3);
-}
-
-.dark-theme .article-entry table td {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.dark-theme .article-entry table tr:hover {
-  background-color: rgba(255, 255, 255, 0.03);
-}
-
-.dark-theme .article-entry table tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.01);
-}
-
-.dark-theme .mermaid .node rect,
-.dark-theme .mermaid .node circle,
-.dark-theme .mermaid .node ellipse,
-.dark-theme .mermaid .node polygon,
-.dark-theme .mermaid .node path {
-  stroke: #ccc !important;
-  fill: rgba(40, 44, 52, 0.7) !important;
-}
-
-.dark-theme .mermaid .edgePath .path {
-  stroke: #ccc !important;
-}
-
-.dark-theme .mermaid .cluster rect {
-  stroke: #ccc !important;
-  fill: rgba(60, 60, 80, 0.5) !important;
-}
-
-.dark-theme .mermaid .label {
-  color: #e6e6e6 !important;
+.article-entry .mermaid {
+  background: transparent !important;
 }
