@@ -101,7 +101,7 @@
 }
 
 /* ===== Centered Image Captions ===== */
-.article-entry figure {
+.article-entry figure:not(.highlight) {
   text-align: center;
   margin: 1.5rem auto;
 }
