@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!-- title -->
+<!-- keywords -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="zzephyrxx">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="zzephyrxx">
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    <meta name="description" content="">
+    <meta name="description" content="阅完需 13-16分钟   若编程语言一代比一代更接近人类，为什么程序员需要理解的东西仍在变多？  1956年的IBM 704 FORTRAN手册里，程序员已经可以写下这样一行。 C &#x3D; A &#x2F; B 今天看，它普通得不能再普通。放在当时，这行代码却在追问一个很现实的问题，寄存器、地址和跳转，能不能交给另一套程序处理？ 从汇编到FORTRAN，谁接手了翻译 汇编本身已经是一层抽">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI技术暗线史 8 | 代码越像人话，复杂性去了哪里">
+<meta property="og:url" content="http://zzephyrxx.github.io/2026/09/14/ji-zhu-an-xian-shi-dai-ma-yue-xiang-ren-hua-fu-za-xing-qu-liao-na-li/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="阅完需 13-16分钟   若编程语言一代比一代更接近人类，为什么程序员需要理解的东西仍在变多？  1956年的IBM 704 FORTRAN手册里，程序员已经可以写下这样一行。 C &#x3D; A &#x2F; B 今天看，它普通得不能再普通。放在当时，这行代码却在追问一个很现实的问题，寄存器、地址和跳转，能不能交给另一套程序处理？ 从汇编到FORTRAN，谁接手了翻译 汇编本身已经是一层抽">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.wemd.app/1788920497575_lxb2mz.jpg">
+<meta property="og:image" content="https://img.wemd.app/1788920783899_ysu7rq.jpg">
+<meta property="og:image" content="https://img.wemd.app/1788922994847_q7pi9o.jpg">
+<meta property="og:image" content="https://img.wemd.app/1788923246406_47wl34.jpg">
+<meta property="og:image" content="https://img.wemd.app/1788923498595_zpmo8o.jpg">
+<meta property="og:image" content="https://img.wemd.app/1788938663934_q86upf.jpg">
+<meta property="og:image" content="https://img.wemd.app/1788939271547_h27xj6.jpg">
+<meta property="article:published_time" content="2026-09-14T02:24:01.000Z">
+<meta property="article:modified_time" content="2026-10-09T02:16:19.179Z">
+<meta property="article:author" content="zzephyrxx">
+<meta property="article:tag" content="AI技术暗线史">
+<meta property="article:tag" content="编程语言">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img.wemd.app/1788920497575_lxb2mz.jpg">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/favicon.ico">
+    <title>AI技术暗线史 8 | 代码越像人话，复杂性去了哪里 · zzephyrxx&#39;s Studio</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .footer-fixed-btn,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(
+            -45deg,
+            #444 0,
+            #444 80px,
+            #333 80px,
+            #333 160px
+        );
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link id="stylesheet-fancybox" rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-base" rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-mobile" rel="preload" href="/css/mobile.css" as="style" onload="this.onload=null;this.rel='stylesheet';this.media='screen and (max-width: 960px)'">
+    <link id="stylesheet-theme-dark" rel="preload" href="/css/dark.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-custom" rel="preload" href="/css/custom.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    <!-- 百度统计  -->
+    <!-- 谷歌统计  -->
+    <!-- Google tag (gtag.js) -->
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js"><\/script>')
+        }
+    </script>
+        <body class="post-body">
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        <div class="header-sidebar-menu">
+            <div style="padding-left: 1px;">&#xe775;</div>
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href="/">zzephyrxx's Studio.</a>
+        </span>
+    </div>
+    <!-- toggle banner -->
+    <div class="banner">
+        <div class="blog-title header-element">
+            <a href="/">zzephyrxx&#39;s Studio.</a>
+        </div>
+        <div class="post-title header-element">
+            <a href="#" class="post-name">AI技术暗线史 8 | 代码越像人话，复杂性去了哪里</a>
+        </div>
+    </div>
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- donate button -->
+
+    <!-- back to top button -->
+    <div class="footer-fixed-btn footer-fixed-btn--hidden back-top">
+        <div>&#xe639;</div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="    height:50vh;
+">
+    <!-- 主页  -->
+    <!-- 404页  -->
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.png)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+                AI技术暗线史 8 | 代码越像人话，复杂性去了哪里
+            <!-- 404 -->
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            <!-- 404 -->
+        </p>
+        <!-- 文章页 meta -->
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                    <div class="post-intro-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="AI技术暗线史">AI技术暗线史</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="编程语言">编程语言</a>
+</div>
+
+                <!-- 文章字数统计 -->
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">3.9k</span>阅读时长: <span class="post-count reading-time">13 min</span></span>
+                    </div>
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2026/09/14</span>
+                    <!-- busuanzi -->
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" alt="loading">
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <span id="more"></span>
+<p><strong>阅完需</strong> 13-16分钟</p>
+<hr />
+<blockquote>
+<p>若编程语言一代比一代更接近人类，为什么程序员需要理解的东西仍在变多？</p>
+</blockquote>
+<p>1956年的IBM 704 FORTRAN手册里，程序员已经可以写下这样一行。</p>
+<p><code>C = A / B</code></p>
+<p>今天看，它普通得不能再普通。放在当时，这行代码却在追问一个很现实的问题，寄存器、地址和跳转，能不能交给另一套程序处理？</p>
+<h2 id="从汇编到fortran谁接手了翻译">从汇编到FORTRAN，谁接手了翻译</h2>
+<p>汇编本身已经是一层抽象。助记符替代数值操作码，符号标签让汇编器计算跳转地址。程序员少记了一批数字，却仍要按照某台机器的指令集安排寄存器、地址与跳转。</p>
+<p>FORTRAN手册把新系统称为「自动编码」。公式、循环和数组下标可以先用更接近问题的方式表达，再由编译器降到IBM 704指令。</p>
+<p>可机器接手翻译之后，生成的程序会不会慢得无法使用？</p>
+<p><em>John Backus</em>后来回顾FORTRAN时写到，当时人们普遍怀疑自动编程系统能否生成高效程序。IBM 704已用硬件加速浮点和索引，低效代码很难继续藏在缓慢的子程序后面。团队因此认定，生成程序若不能接近手写代码的效率，FORTRAN就很难被广泛采用。</p>
+<p><strong>FORTRAN改变了分工。应用程序员更专注于问题，编译器团队接手翻译与优化，机器仍在决定什么样的代码才算高效。</strong></p>
+<p>复用、自动化、非法状态排除与集中优化，确实能减少大量重复劳动。抽象在消除一部分工作时，也会把另一部分工作交给实现者、工具和处理异常的人。</p>
+<p><img class="article-image-compact" src="https://img.wemd.app/1788920497575_lxb2mz.jpg" alt="一行高层代码的简洁，来自另一群人接手了翻译细节"></p>
+<h2 id="程序能运行为什么还会看不懂">程序能运行，为什么还会看不懂</h2>
+<p>FORTRAN解决了很多手工编码负担，却没有自动解决大型程序的组织问题。高层语言同样能写出到处跳转的控制流。语句看起来更像数学，运行过程仍可能像打结的线。</p>
+<p>1968年，<em>Edsger Dijkstra</em>反对在高层语言中滥用<code>go to</code>。代码难看只是表层问题。程序员看到的是静态文本，真正需要判断的是运行中的动态过程。跳转越随意，人越难从代码位置推断程序此刻走到了哪里。</p>
+<p>循环、条件和过程调用把可能的执行路径限制在较稳定的结构里。分支和状态还在，但人终于有了一张更容易核对的地图。</p>
+<p><img class="article-image-compact" src="https://img.wemd.app/1788920783899_ysu7rq.jpg" alt="结构化控制流没有删掉分支，它限制了分支能够怎样组合"></p>
+<p>几年后，<em>David Parnas</em>讨论模块分解时，把重点放在隐藏可能变化的设计决策上。把代码切成几份，还不够说明模块有价值。若接口能隔开数据表示、设备格式或算法选择，一处变化就不必穿过整个系统。</p>
+<p>好的抽象至少做两件事。它提供一个更小的使用界面，也划出一条责任边界。调用者依赖承诺，实现者承担细节。边界画错时，模块数量再多，也只是把复杂性分装进更多文件。</p>
+<p><strong>结构化控制流约束程序往哪里走，信息隐藏约束变化能传到哪里。它们没有消灭复杂性，却让复杂性有了可以检查的边界。</strong></p>
+<p><img class="article-image-compact" src="https://img.wemd.app/1788922994847_q7pi9o.jpg" alt="信息隐藏的关键，是把最可能变化的设计决策关在边界里"></p>
+<h2 id="对象把状态关进边界">对象，把状态关进边界</h2>
+<p>面向对象常被讲成一组语法特征，类、对象、封装、继承。类与继承这一支的重要源头，贴近一个工程问题：怎样在程序里表示许多会随时间变化、彼此作用的实体。</p>
+<p>1960年代的Simula源自离散事件模拟。船、顾客、机器和队列各有状态，也会发生动作。类和对象让这类实体能在代码中获得相对独立的表示。Simula 67又把类、继承和虚过程等机制整理进一套通用语言。</p>
+<p>Smalltalk走了另一条组合路线，Xerox PARC的Smalltalk把对象、消息传递和交互式图形环境连在一起。Kay更关心个人计算环境里的对象如何通过消息协作。把数据塞进类里，只是其中一部分。</p>
+<p>研究语言里的机制后来进入了更广的工程环境。1980年代，Bjarne Stroustrup发展的C++把Simula式的类组织带进C式系统编程。1990年代，Java又把面向对象、垃圾回收和虚拟机上的跨平台运行放到同一套语言环境里。两种语言及其工具和库，扩大了对象方法在实际项目中的使用范围。</p>
+<p>对象带来的便利很真实。窗口可以自己响应事件，账户可以守住余额的表示，调用者不必知道内部每个字段。大型程序可以按稳定的职责和协议组织，不必始终沿着执行步骤切分。</p>
+<p>争议也由此而来。继承能复用实现，也会让子类依赖父类内部安排。对象保存状态很方便，许多对象共同修改状态时，变化顺序又会变成新的推理负担。</p>
+<p><em>Barbara Liskov</em>在1987年的演讲中给过一个克制的判断：数据抽象是更重要的思想，层级关系只在一些情形下扩展它的用途。这比后来流行的「万物皆对象」更耐用。对象可以保护约束和协议，继承也可能重新暴露实现依赖。</p>
+<p><strong>对象真正有价值的地方，是把行为承诺与实现分开；继承树画得再深，也不会自动得到更好的边界。</strong></p>
+<p><img class="article-image-compact" src="https://img.wemd.app/1788923246406_47wl34.jpg" alt="对象能够隐藏实现，层级也可能把实现依赖重新带回来"></p>
+<h2 id="函数式编程另一种控制状态的方法">函数式编程，另一种控制状态的方法</h2>
+<p>函数式编程常被描述成近年的回归。可它真的离开过吗？</p>
+<p><em>John McCarthy</em>在1960年的Lisp论文里，用符号表达式表示数据和程序，并把递归函数放在语言中心。这套表示不依赖IBM 704或某一台电子计算机。Lisp与FORTRAN几乎来自同一代机器，却选了不同的抽象对象。FORTRAN贴近数值计算过程，Lisp更关心函数与符号怎样组合。</p>
+<p>再往后看，会遇到ML、LCF和多态类型推断。</p>
+<p>1970年代，ML最初是Edinburgh LCF定理证明系统的元语言。LCF用受保护的定理类型和小型可信内核守住证明有效性，只有内核里的推理规则能够构造定理值。ML负责让研究者编写调用这些规则的证明策略。Robin Milner发展的多态类型推断又处理另一层问题，让通用函数可以服务多种类型，也让编译器提前排除一批类型错误。</p>
+<p>三件事，各管一层。可信内核守住定理值怎样产生，ML承载证明策略，类型推断检查ML程序的类型。它们会配合工作，但不能揉成一项保证，更不能把类型正确直接理解成逻辑结论为真。</p>
+<p>1987年，一批研究者又因十多种彼此相近的惰性纯函数语言难以协作，决定设计一种共同语言，后来形成Haskell。所谓回归，更准确地说，是这些一直存在的思想逐步进入了更广的语言工具箱。</p>
+<p>JavaScript、Python、Java和C++都吸收了匿名函数、高阶函数或更方便的不可变数据处理，但没有因此变成纯函数语言。</p>
+<p><em>Backus</em>的图灵奖演讲。带队做出FORTRAN的人，在1977年转而批评主流语言仍受冯·诺依曼机器逐字读写存储器的方式牵引。他希望程序通过函数和组合器连接，获得更容易推理的代数性质。</p>
+<p>回到共享状态，把它拆开看。</p>
+<p>纯函数的结果只由显式输入决定。它不读取外部可变状态，也不直接产生可观察副作用，所以相同输入会得到相同结果。减少共享可变状态，是工程中获得这种可推理性的常见手段，但只做到这一点，还不能保证函数纯净。</p>
+<p>代价当然还在。程序最终要读文件、发网络请求、更新时间。Haskell用类型和相关结构把这些效果显式组织起来，学习成本与实现成本也随之上升。惰性求值可以避免不需要的计算，也可能让时间和内存行为更难从表面代码判断。</p>
+<p>所以，对象与函数没必要争一个总冠军。对象适合围绕身份、生命周期和协议组织系统，函数适合表达变换、组合和可推理的数据流。放到工程里，常见的有效做法仍是在边界处管理状态，在内部尽量保持计算清楚。</p>
+<p><img class="article-image-compact" src="https://img.wemd.app/1788923498595_zpmo8o.jpg" alt="纯函数隔离了部分状态传播，外部效果仍要有人管理"></p>
+<p><strong>对象与函数没有总冠军。真正的选择要看，哪些状态需要身份和生命周期，哪些计算可以变成清晰的数据变换。</strong></p>
+<h2 id="抽象会漏水ai也不例外">抽象会漏水，AI也不例外</h2>
+<p>写代码时很容易有一种直觉，语言越高级，离复杂性就越远。可一碰到性能、异常或安全问题，底下那些被藏起来的东西，怎么又回来了？</p>
+<p>1987年，Frederick Brooks把软件工作区分为本质任务与附带任务。本质复杂性来自软件需要表达和验证的概念结构，包括数据关系、算法、调用关系、接口约束与持续变化。他还概括了复杂性、顺应性、可变性和不可见性等困难。附带工作则包括用编程语言表示这些概念，再把它们映射到受时间和空间限制的机器上。</p>
+<p>这个区分很容易被读成，高级语言没什么用。其实恰恰相反。高级语言能大幅减少手写指令、安排地址和反复翻译概念的工作。只是数据怎样关联、算法怎么选、接口允许什么、变化怎样传播，这些决定仍然要由人做。</p>
+<p>底层没有消失。2002年，Joel Spolsky把类似经验概括为「泄漏的抽象」。TCP向上提供可靠字节流，网络拥塞和重传仍会以延迟的形式穿过接口。二维数组的两种遍历写法可能同样正确，页错误数量却会让性能相差很大。</p>
+<p>「泄漏」不等于抽象失败。没有TCP、数据库、垃圾回收器和虚拟机，绝大多数团队连今天的软件规模都到不了。它只是提醒我们，抽象有适用范围。平时可以依赖接口，异常、性能和安全边界出现时，还得知道底下哪一层可能重新影响结果。</p>
+<p>回到抽象这条线，我们少记了一批指令地址，又开始理解编译器、运行时、并发、数据库和网络。个人不用同时处理全部细节，团队和系统里的知识总量却可能继续增长。</p>
+<p><img class="article-image-compact" src="https://img.wemd.app/1788938663934_q86upf.jpg" alt="抽象让日常开发成为可能，边界条件会让底层重新出现在结果里"></p>
+<p>说到这，AI也就接上来了。</p>
+<p>代码生成模型又把抽象抬高了一层。程序员可以先写自然语言需求，让模型给出代码候选。可它接手的，究竟是哪一层工作？</p>
+<p>编译器面对受形式语法和语言语义约束的输入。合格实现需要保存标准允许的可观察行为，生成的机器码可以不同。源语言本身也可能留下未定义行为、未指定行为或由具体实现决定的行为。程序通过语法检查，并不等于它只有一种确定结果。</p>
+<p>代码模型面对的，却是自然语言和项目上下文。同一句需求可能得到不同实现，需求没写出的异常条件，也可能被模型用常见假设补上。</p>
+<p>2021年的Codex论文准备了164道手写HumanEval题，让模型根据文档字符串生成Python函数。Codex-12B的pass@1为28.8%。这个指标根据每题的多次采样，估计一份候选代码通过配套单元测试的概率。这里的「正确」，只指通过那些单元测试，不能理解成模型参加了一次固定考试，更不能直接外推到完整项目。</p>
+<p>把场景从小函数换成成熟代码库，结果就更反直觉了。一项针对早期2025年工具的随机对照研究，让16位熟悉各自成熟开源项目的开发者完成246项真实任务。在这个有限场景里，允许使用AI辅助的任务，平均耗时反而增加了19%。</p>
+<p>先别急着下结论。研究团队明确讨论了样本、工具时期和项目类型的限制。到2026年，他们又根据参与者访谈，认为当时的新工具相对2025年更可能带来帮助。同时，拒绝无AI条件、任务选择等选择偏差影响了数据，现有结果对提速幅度只能提供很弱的证据。</p>
+<p>所以，这些结果不适合拿来宣布AI编程一定提速或一定减速。它更适合提醒我们，生成几段像样的代码，与把改动安全接进旧系统，中间还隔着理解仓库、发现隐含约束、运行测试、审查差异和处理失败。</p>
+<p>AI接走了输入语法、样板代码和部分检索工作。需求描述、上下文选择、验证标准和责任归属，也随之变得更显眼。模型越能一次生成很多代码，人越需要判断该生成什么、哪些结果值得相信、哪里必须回到底层检查。</p>
+<p><img class="article-image-compact" src="https://img.wemd.app/1788939271547_h27xj6.jpg" alt="AI扩大了生成能力，可靠性仍来自逐层检查"></p>
+<p><strong>AI省下的是一部分输入和生成工作。需求边界、验证标准与失败责任，仍要由人明确。</strong></p>
+<h2 id="当代码也成了中间产物">当代码也成了中间产物</h2>
+<p>还记得开头那行C = A / B吗？</p>
+<p>1956年，程序员把一行更像公式的代码交给编译器，翻译成机器可以执行的指令。今天，程序员又开始把自然语言交给Codex这样的代码模型，让它生成代码。</p>
+<p>代码本身，也成了中间产物。</p>
+<p>可旧层没有退场。编译器仍要理解指令，运行时仍要管理内存，数据库仍要落到存储，AI生成的代码也要在真实机器和真实组织里承担后果。</p>
+<p>抽象既会减少重复劳动，也会重新安排谁能看见哪部分复杂性。调用者获得简洁接口，实现者处理被隐藏的细节，工具提供者也获得决定底层实现的空间。</p>
+<p>写下需求以后，人还要说明哪些行为可以观察，哪些边界不能越过，再用测试、审查和运行结果检查答案。程序员在AI时代仍需承担这份判断，知道什么时候可以相信抽象，什么时候要沿着问题向下追，并为系统实际做出的事给出可验证的解释。</p>
+<p><strong>代码可以成为中间产物，判断和责任不行。</strong></p>
+
+    </article>
+    <!-- license -->
+        <div class="license-wrapper">
+            <p>作者：<a href="http://zzephyrxx.github.io">zzephyrxx</a>
+            <p>链接：<a href="http://zzephyrxx.github.io/2026/09/14/ji-zhu-an-xian-shi-dai-ma-yue-xiang-ren-hua-fu-za-xing-qu-liao-na-li/">http://zzephyrxx.github.io/2026/09/14/ji-zhu-an-xian-shi-dai-ma-yue-xiang-ren-hua-fu-za-xing-qu-liao-na-li/</a>
+            <p>发表日期：<a href="http://zzephyrxx.github.io/2026/09/14/ji-zhu-an-xian-shi-dai-ma-yue-xiang-ren-hua-fu-za-xing-qu-liao-na-li/">September 14th 2026, 10:24:01 am</a>
+            <p>更新日期：<a href="http://zzephyrxx.github.io/2026/09/14/ji-zhu-an-xian-shi-dai-ma-yue-xiang-ren-hua-fu-za-xing-qu-liao-na-li/">October 9th 2026, 10:16:19 am</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2026/09/25/ji-zhu-an-xian-shi-dai-ma-gong-kai-yi-hou-shui-jue-ding-xia-yi-ci-xiu-gai/" title="AI技术暗线史 9 | 代码公开以后，谁决定下一次修改">
+                    <div class="nextTitle">AI技术暗线史 9 | 代码公开以后，谁决定下一次修改</div>
+                </a>
+        </li>
+        <li class="previous">
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2026/09/07/ji-zhu-an-xian-shi-cong-dan-ji-dao-yun-ji-suan-kong-zhi-quan-de-zhuan-yi/" title="AI技术暗线史 7 | 从单机到云计算：控制权的转移">
+                    <div class="prevTitle">AI技术暗线史 7 | 从单机到云计算：控制权的转移</div>
+                </a>
+        </li>
+    </ul>
+    <!-- comment -->
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+            
+            
+            
+            <!-- utteranc评论 -->
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+            
+            
+            
+        </div>
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    <!-- Mathjax -->
+            <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script>
+
+</main>
+
+                <!-- profile -->
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+        <div class="social">
+                            <a href="mailto:yurou_z@163.com" class="iconfont-archer email" title="email" ></a>
+                <a href="//github.com/zzephyrxx" class="iconfont-archer github" target="_blank" title="github"></a>
+                <span class="iconfont-archer wechat" title="wechat">
+                    <img class="profile-qr" src="/assets/wechat_qr.png" />
+                </span>
+
+        </div>
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span>
+    <!-- website approve for Chinese user -->
+    <!---->
+    <!-- 不蒜子  -->
+        <div class="busuanzi-container">
+                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+        </div>
+</footer>
+
+        </div>
+        <!-- toc -->
+            <div class="toc-wrapper toc-wrapper-loding" style=    top:50vh;
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E6%B1%87%E7%BC%96%E5%88%B0fortran%E8%B0%81%E6%8E%A5%E6%89%8B%E4%BA%86%E7%BF%BB%E8%AF%91"><span class="toc-number">1.</span> <span class="toc-text">从汇编到FORTRAN，谁接手了翻译</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E8%83%BD%E8%BF%90%E8%A1%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%98%E4%BC%9A%E7%9C%8B%E4%B8%8D%E6%87%82"><span class="toc-number">2.</span> <span class="toc-text">程序能运行，为什么还会看不懂</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E6%8A%8A%E7%8A%B6%E6%80%81%E5%85%B3%E8%BF%9B%E8%BE%B9%E7%95%8C"><span class="toc-number">3.</span> <span class="toc-text">对象，把状态关进边界</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%8F%A6%E4%B8%80%E7%A7%8D%E6%8E%A7%E5%88%B6%E7%8A%B6%E6%80%81%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">函数式编程，另一种控制状态的方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E4%BC%9A%E6%BC%8F%E6%B0%B4ai%E4%B9%9F%E4%B8%8D%E4%BE%8B%E5%A4%96"><span class="toc-number">5.</span> <span class="toc-text">抽象会漏水，AI也不例外</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BD%93%E4%BB%A3%E7%A0%81%E4%B9%9F%E6%88%90%E4%BA%86%E4%B8%AD%E9%97%B4%E4%BA%A7%E7%89%A9"><span class="toc-number">6.</span> <span class="toc-text">当代码也成了中间产物</span></a></li></ol>
+            </div>
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 19
+        </div>
+        <!-- search  -->
+    </div>
+    <div class="post-archive">
+            <div class="archive-year"> 2026 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/09</span>
+            <a class="archive-post-title" href="/2026/10/09/gao-xing-jie-bi-ren-sheng-zhi-nan-mu-lu-dao-hang/">高性价比人生指南</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/09</span>
+            <a class="archive-post-title" href="/2026/10/09/ke-yan-yu-lun-wen-xie-zuo-zi-yuan-shou-ce/">如何做科研与写论文</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/08</span>
+            <a class="archive-post-title" href="/2026/10/08/jian-wei-zhi-zhu-dang-yi-ge-fen-shu-cheng-wei-fang-xiang-sun-shi-han-shu-ru-he-qian-yin-ai-de-xuan-ze/">见微知著 | 当一个分数成为方向：损失函数如何牵引AI的选择</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/06</span>
+            <a class="archive-post-title" href="/2026/10/06/jian-wei-zhi-zhu-yi-pai-shu-zi-ru-he-chuan-guo-shen-jing-wang-luo-cong-ju-zhen-cheng-fa-dao-fei-xian-xing/">见微知著 | 一排数字如何穿过神经网络：从矩阵乘法到非线性</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span>
+            <a class="archive-post-title" href="/2026/09/25/ji-zhu-an-xian-shi-dai-ma-gong-kai-yi-hou-shui-jue-ding-xia-yi-ci-xiu-gai/">AI技术暗线史 9 | 代码公开以后，谁决定下一次修改</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span>
+            <a class="archive-post-title" href="/2026/09/14/ji-zhu-an-xian-shi-dai-ma-yue-xiang-ren-hua-fu-za-xing-qu-liao-na-li/">AI技术暗线史 8 | 代码越像人话，复杂性去了哪里</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/07</span>
+            <a class="archive-post-title" href="/2026/09/07/ji-zhu-an-xian-shi-cong-dan-ji-dao-yun-ji-suan-kong-zhi-quan-de-zhuan-yi/">AI技术暗线史 7 | 从单机到云计算：控制权的转移</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span>
+            <a class="archive-post-title" href="/2026/05/26/ji-zhu-an-xian-shi-cong-fu-hao-dao-lian-jie-yi-chang-ren-shi-lun-de-an-zhan/">AI技术暗线史 | 从符号到连接：一场认识论的暗战</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span>
+            <a class="archive-post-title" href="/2026/05/07/ji-zhu-an-xian-shi-suan-li-bao-zheng-dang-ji-suan-cheng-ben-jue-ding-ji-zhu-fang-xiang/">AI技术暗线史 | 算力暴政：当计算成本决定技术方向</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/10</span>
+            <a class="archive-post-title" href="/2026/04/10/ai-ji-zhu-an-xian-shi-3-huo-ji-ting-jue-jin-hua-lun-cong-ting-jian-dao-ting-dong-de-ai-jia-gou-chang-zheng/">AI技术暗线史 | 硅基听觉进化论：从'听见'到'听懂'的AI架构长征</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/03</span>
+            <a class="archive-post-title" href="/2026/04/03/2026-nian-yu-yin-ai-qu-shi-gou-jian-wei-lai-jiao-hu-jie-mian/">2026年语音AI趋势：构建未来交互界面</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/28</span>
+            <a class="archive-post-title" href="/2026/03/28/ji-zhu-an-xian-shi-mang-ren-xia-shan-yu-wu-jin-jie-ti-ti-du-xia-jiang-suan-fa-zhong-de-xi-wang-yu-kun-ju/">技术暗线史 | 盲人下山与无尽阶梯：梯度下降算法中的希望与困局</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/01</span>
+            <a class="archive-post-title" href="/2026/03/01/ji-zhu-an-xian-shi-cong-ti-hua-ji-de-kong-dong-dao-transformer-de-zhu-yi-li/">技术暗线史 | 从提花机的孔洞到Transformer的'注意力'</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span>
+            <a class="archive-post-title" href="/2026/02/06/yi-tu-gao-dong-he-wei-zi-hui-gui-fei-zi-hui-gui/">一图搞懂何为自回归/非自回归</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/03</span>
+            <a class="archive-post-title" href="/2026/02/03/huo-ji-sheng-ming-ti-de-ting-jue-ju-jiao-yi-zhu/">硅基生命体的「听觉聚焦」艺术——具身智能机器人如何复刻鸡尾酒会效应</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span>
+            <a class="archive-post-title" href="/2026/01/27/rag-xi-tong-ru-men/">RAG系统入门</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span>
+            <a class="archive-post-title" href="/2026/01/24/mark-tilbury-de-50-tiao-ren-sheng-jian-yi/">Mark Tilbury的50条人生建议</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span>
+            <a class="archive-post-title" href="/2026/01/24/nano-banana-pro-hui-tu-jiao-cheng/">Nano-Banana Pro绘图教程</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span>
+            <a class="archive-post-title" href="/2026/01/23/shi-ban-semidone-ji-jian-zhuo-mian-dai-ban-app/">事半·SemiDone极简桌面代办APP</a>
+        </li>
+            </ul>
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+            <span class="sidebar-tag-name" data-tags="YouTube搬运">
+                <span class="iconfont-archer">&#xe606;</span>
+                YouTube搬运
+            </span>
+            <span class="sidebar-tag-name" data-tags="人生经验">
+                <span class="iconfont-archer">&#xe606;</span>
+                人生经验
+            </span>
+            <span class="sidebar-tag-name" data-tags="搬运">
+                <span class="iconfont-archer">&#xe606;</span>
+                搬运
+            </span>
+            <span class="sidebar-tag-name" data-tags="AI绘图">
+                <span class="iconfont-archer">&#xe606;</span>
+                AI绘图
+            </span>
+            <span class="sidebar-tag-name" data-tags="语音AI">
+                <span class="iconfont-archer">&#xe606;</span>
+                语音AI
+            </span>
+            <span class="sidebar-tag-name" data-tags="人机交互">
+                <span class="iconfont-archer">&#xe606;</span>
+                人机交互
+            </span>
+            <span class="sidebar-tag-name" data-tags="空间听觉">
+                <span class="iconfont-archer">&#xe606;</span>
+                空间听觉
+            </span>
+            <span class="sidebar-tag-name" data-tags="AI技术暗线史">
+                <span class="iconfont-archer">&#xe606;</span>
+                AI技术暗线史
+            </span>
+            <span class="sidebar-tag-name" data-tags="RAG">
+                <span class="iconfont-archer">&#xe606;</span>
+                RAG
+            </span>
+            <span class="sidebar-tag-name" data-tags="AI">
+                <span class="iconfont-archer">&#xe606;</span>
+                AI
+            </span>
+            <span class="sidebar-tag-name" data-tags="大模型">
+                <span class="iconfont-archer">&#xe606;</span>
+                大模型
+            </span>
+            <span class="sidebar-tag-name" data-tags="一图读懂">
+                <span class="iconfont-archer">&#xe606;</span>
+                一图读懂
+            </span>
+            <span class="sidebar-tag-name" data-tags="机器学习">
+                <span class="iconfont-archer">&#xe606;</span>
+                机器学习
+            </span>
+            <span class="sidebar-tag-name" data-tags="SemiDone">
+                <span class="iconfont-archer">&#xe606;</span>
+                SemiDone
+            </span>
+            <span class="sidebar-tag-name" data-tags="软件分享">
+                <span class="iconfont-archer">&#xe606;</span>
+                软件分享
+            </span>
+            <span class="sidebar-tag-name" data-tags="语音技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                语音技术
+            </span>
+            <span class="sidebar-tag-name" data-tags="科研指南">
+                <span class="iconfont-archer">&#xe606;</span>
+                科研指南
+            </span>
+            <span class="sidebar-tag-name" data-tags="论文写作">
+                <span class="iconfont-archer">&#xe606;</span>
+                论文写作
+            </span>
+            <span class="sidebar-tag-name" data-tags="见微知著">
+                <span class="iconfont-archer">&#xe606;</span>
+                见微知著
+            </span>
+            <span class="sidebar-tag-name" data-tags="AI安全">
+                <span class="iconfont-archer">&#xe606;</span>
+                AI安全
+            </span>
+            <span class="sidebar-tag-name" data-tags="神经网络">
+                <span class="iconfont-archer">&#xe606;</span>
+                神经网络
+            </span>
+            <span class="sidebar-tag-name" data-tags="生活指南">
+                <span class="iconfont-archer">&#xe606;</span>
+                生活指南
+            </span>
+            <span class="sidebar-tag-name" data-tags="资源导航">
+                <span class="iconfont-archer">&#xe606;</span>
+                资源导航
+            </span>
+            <span class="sidebar-tag-name" data-tags="编程语言">
+                <span class="iconfont-archer">&#xe606;</span>
+                编程语言
+            </span>
+            <span class="sidebar-tag-name" data-tags="开源">
+                <span class="iconfont-archer">&#xe606;</span>
+                开源
+            </span>
+            <span class="sidebar-tag-name" data-tags="云计算">
+                <span class="iconfont-archer">&#xe606;</span>
+                云计算
+            </span>
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+        <span class="sidebar-category-name" data-categories="实用软件">
+            <span class="iconfont-archer">&#xe60a;</span>
+            实用软件
+        </span>
+        <span class="sidebar-category-name" data-categories="RAG">
+            <span class="iconfont-archer">&#xe60a;</span>
+            RAG
+        </span>
+        <span class="sidebar-category-name" data-categories="AI技术暗线史">
+            <span class="iconfont-archer">&#xe60a;</span>
+            AI技术暗线史
+        </span>
+        <span class="sidebar-category-name" data-categories="AI绘图">
+            <span class="iconfont-archer">&#xe60a;</span>
+            AI绘图
+        </span>
+        <span class="sidebar-category-name" data-categories="语音AI">
+            <span class="iconfont-archer">&#xe60a;</span>
+            语音AI
+        </span>
+        <span class="sidebar-category-name" data-categories="人生经验">
+            <span class="iconfont-archer">&#xe60a;</span>
+            人生经验
+        </span>
+        <span class="sidebar-category-name" data-categories="一图读懂">
+            <span class="iconfont-archer">&#xe60a;</span>
+            一图读懂
+        </span>
+        <span class="sidebar-category-name" data-categories="语音技术">
+            <span class="iconfont-archer">&#xe60a;</span>
+            语音技术
+        </span>
+        <span class="sidebar-category-name" data-categories="见微知著">
+            <span class="iconfont-archer">&#xe60a;</span>
+            见微知著
+        </span>
+        <span class="sidebar-category-name" data-categories="科研指南">
+            <span class="iconfont-archer">&#xe60a;</span>
+            科研指南
+        </span>
+        <span class="sidebar-category-name" data-categories="生活指南">
+            <span class="iconfont-archer">&#xe60a;</span>
+            生活指南
+        </span>
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "http://zzephyrxx.github.io",
+        root: siteMetaRoot,
+        author: "zzephyrxx"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+        <!-- main func -->
+        <script src="/scripts/main.js"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js" onload="window.Fancybox.bind('[data-fancybox]')" defer></script>
+        <!-- algolia -->
+        <!-- busuanzi -->
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        <!-- async load share.js -->
+            <script src="/scripts/share.js" async></script>
+        <!-- mermaid -->
+            <script src='https://cdn.jsdelivr.net/npm/mermaid@10.4.0/dist/mermaid.min.js' defer></script>
+            <script src='/scripts/custom-mermaid.js' defer></script>
+        <!-- Code Block Beautification -->
+        <script src="/lib/codeBlock/codeBlockFuction.js"></script>
+        <script src="/lib/codeBlock/codeBLang.js"></script>
+        <script src="/lib/codeBlock/clipboard.min.js"></script>
+        <script src="/lib/codeBlock/codeCopy.js"></script>
+        <script src="/js/hexo_resize_image.js"></script>
+    </body>
+</html>

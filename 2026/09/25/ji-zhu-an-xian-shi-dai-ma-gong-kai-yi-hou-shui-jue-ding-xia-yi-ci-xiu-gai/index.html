@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!-- title -->
+<!-- keywords -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="zzephyrxx">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="zzephyrxx">
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    <meta name="description" content="">
+    <meta name="description" content="阅完需：13—17分钟   如果开源意味着人人都能修改，为何一份确实修好了问题的补丁，仍可能被拒绝？  先跟着一份补丁走一遍。（以下项目、人物与补丁均为教学虚构） 一个叫“北斗笔记”的开源软件升级后，安装文档还留着一条旧命令。小羽照着操作，卡在报错页面。他找到新的写法，改了两行文字，在自己电脑上验证无误，然后把修改提交给项目。 他没有直接改掉所有用户看到的官方版本。补丁先停在一处">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI技术暗线史 9 | 代码公开以后，谁决定下一次修改">
+<meta property="og:url" content="http://zzephyrxx.github.io/2026/09/25/ji-zhu-an-xian-shi-dai-ma-gong-kai-yi-hou-shui-jue-ding-xia-yi-ci-xiu-gai/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="阅完需：13—17分钟   如果开源意味着人人都能修改，为何一份确实修好了问题的补丁，仍可能被拒绝？  先跟着一份补丁走一遍。（以下项目、人物与补丁均为教学虚构） 一个叫“北斗笔记”的开源软件升级后，安装文档还留着一条旧命令。小羽照着操作，卡在报错页面。他找到新的写法，改了两行文字，在自己电脑上验证无误，然后把修改提交给项目。 他没有直接改掉所有用户看到的官方版本。补丁先停在一处">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.wemd.app/1790259626930_xzixs2.jpg">
+<meta property="og:image" content="https://img.wemd.app/1790260208371_rwl4hx.jpg">
+<meta property="og:image" content="https://img.wemd.app/1790260254373_ltikhd.jpg">
+<meta property="og:image" content="https://img.wemd.app/1790260281972_egnea1.jpg">
+<meta property="article:published_time" content="2026-09-25T02:34:01.000Z">
+<meta property="article:modified_time" content="2026-10-09T02:16:19.177Z">
+<meta property="article:author" content="zzephyrxx">
+<meta property="article:tag" content="AI技术暗线史">
+<meta property="article:tag" content="开源">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img.wemd.app/1790259626930_xzixs2.jpg">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/favicon.ico">
+    <title>AI技术暗线史 9 | 代码公开以后，谁决定下一次修改 · zzephyrxx&#39;s Studio</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .footer-fixed-btn,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(
+            -45deg,
+            #444 0,
+            #444 80px,
+            #333 80px,
+            #333 160px
+        );
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link id="stylesheet-fancybox" rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-base" rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-mobile" rel="preload" href="/css/mobile.css" as="style" onload="this.onload=null;this.rel='stylesheet';this.media='screen and (max-width: 960px)'">
+    <link id="stylesheet-theme-dark" rel="preload" href="/css/dark.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-custom" rel="preload" href="/css/custom.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    <!-- 百度统计  -->
+    <!-- 谷歌统计  -->
+    <!-- Google tag (gtag.js) -->
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js"><\/script>')
+        }
+    </script>
+        <body class="post-body">
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        <div class="header-sidebar-menu">
+            <div style="padding-left: 1px;">&#xe775;</div>
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href="/">zzephyrxx's Studio.</a>
+        </span>
+    </div>
+    <!-- toggle banner -->
+    <div class="banner">
+        <div class="blog-title header-element">
+            <a href="/">zzephyrxx&#39;s Studio.</a>
+        </div>
+        <div class="post-title header-element">
+            <a href="#" class="post-name">AI技术暗线史 9 | 代码公开以后，谁决定下一次修改</a>
+        </div>
+    </div>
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- donate button -->
+
+    <!-- back to top button -->
+    <div class="footer-fixed-btn footer-fixed-btn--hidden back-top">
+        <div>&#xe639;</div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="    height:50vh;
+">
+    <!-- 主页  -->
+    <!-- 404页  -->
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.png)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+                AI技术暗线史 9 | 代码公开以后，谁决定下一次修改
+            <!-- 404 -->
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            <!-- 404 -->
+        </p>
+        <!-- 文章页 meta -->
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                    <div class="post-intro-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="AI技术暗线史">AI技术暗线史</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="开源">开源</a>
+</div>
+
+                <!-- 文章字数统计 -->
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">3.7k</span>阅读时长: <span class="post-count reading-time">12 min</span></span>
+                    </div>
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2026/09/25</span>
+                    <!-- busuanzi -->
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" alt="loading">
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <span id="more"></span>
+<p><strong>阅完需</strong>：13—17分钟</p>
+<hr />
+<blockquote>
+<p>如果开源意味着人人都能修改，为何一份确实修好了问题的补丁，仍可能被拒绝？</p>
+</blockquote>
+<p>先跟着一份补丁走一遍。（以下项目、人物与补丁均为教学虚构）</p>
+<p>一个叫“北斗笔记”的开源软件升级后，安装文档还留着一条旧命令。小羽照着操作，卡在报错页面。他找到新的写法，改了两行文字，在自己电脑上验证无误，然后把修改提交给项目。</p>
+<p>他没有直接改掉所有用户看到的官方版本。补丁先停在一处等待区：自动检查通过，一位维护者却回复，项目正在重写安装流程，这条修复要改到新文档分支，并补充两个系统上的验证结果。</p>
+<p>代码明明公开，修改也明明正确，为什么还不能立刻合并？</p>
+<p>答案在五件经常被混为一谈的事里：<strong>看见代码、依法修改、递交修改、决定官方版本，以及承担合并后的维护责任，并不是同一种权利。</strong></p>
+<p><img class="article-image-compact" src="https://img.wemd.app/1790259626930_xzixs2.jpg" alt="公开代码只是起点，一份补丁仍要经过法律、工具与治理三类规则"></p>
+<h2 id="第一站补丁先检查自己的通行证">第一站：补丁先检查自己的“通行证”</h2>
+<p>小羽找到源代码，只说明他能够阅读一份文本。若仓库没有明确许可证，著作权并不会因为代码能下载就自动消失；“公开可见”也不自动等于“可以任意复制、修改和再发布”。</p>
+<p>自由软件运动首先追问的正是这层权利。</p>
+<p>1983年，Richard Stallman宣布GNU计划；1985年的《GNU宣言》公开寻求人力、资金和设备支持，希望建立一个可以自由使用的类Unix系统。</p>
+<p>GNU后来把自由软件概括为四项基本自由：按自己的意愿运行程序，研究并修改程序，重新分发副本，以及分发修改后的版本。获得源码是研究和修改的前提。</p>
+<p>“自由”不是“免费”。GNU的定义明确允许商业使用、开发与分发。</p>
+<p>GPL所采用的copyleft也不是把作者权利一笔勾销，而是借助版权许可，要求符合条件的再分发继续把相应自由传下去。</p>
+<p>到了1998年，“开放源代码”这个名称在一次策略会议上被提出，开放源代码促进会随后成立。它更强调开放开发的实用价值和商业沟通。</p>
+<p>OSI的《开源定义》同样不满足于“可以看到”：许可还要允许自由再分发、获取源代码、制作和分发衍生作品，不得歧视个人、群体或应用领域等。</p>
+<p>自由软件与开源软件有大量重叠，关注重点却不完全相同。</p>
+<p>前者把用户自由放在伦理中心，后者更常从开发方式与许可标准解释问题。把两者压成“网上能免费下载”，会同时漏掉它们最看重的东西。</p>
+<p>小羽先确认许可证允许他按条件修改和分发，再阅读项目的贡献指南，确认补丁应该提交到哪里、采用什么格式。</p>
+<p>有些项目还会要求贡献者按开发者来源证明（DCO）作出声明，或签署贡献者许可协议（CLA）。这些是项目接收上游贡献的流程，和开源许可证授予的一般使用、修改与分发权不是同一层规则。</p>
+<p>即使把这些要求全部做完，也不代表原项目必须采纳。许可证给小羽的是行动的法律空间；贡献规则告诉他如何敲门；是否开门，仍由项目治理决定。</p>
+<p><strong>许可证规定别人能对代码做什么；项目治理决定官方版本准备接受什么。</strong></p>
+<h2 id="第二站git为补丁铺路却不替它选终点">第二站：Git为补丁铺路，却不替它选终点</h2>
+<p>小羽在自己的副本里新建分支，改文档、留下提交记录，再把差异发给维护者。这套动作在今天很普通，它背后却有一段与大型协作紧密相关的历史。</p>
+<p>Linux内核早期通过补丁和归档文件传递修改，2002年开始使用专有的分布式版本控制系统BitKeeper。2005年，Linux社区与BitKeeper开发公司的关系破裂，原先的免费使用安排终止。</p>
+<p>Linux开发社区随后开发Git，最初目标包括速度、简单设计、支持大量并行分支、完全分布式，以及处理Linux内核这类大型项目的能力。</p>
+<p>集中式版本控制常把主要仓库放在服务器上。Git则让每个完整克隆都带着项目历史，参与者可以在自己的仓库中提交、试验和分叉，再交换提交。多人不必轮流占用同一张纸，也不用让所有实验立即进入同一条时间线。</p>
+<p>但Git里的“分布式”不等于决策权平均分布。它能记录每个提交改了什么、提交中声明的作者与提交者元数据、哪些提交互为祖先，以及两条历史如何合并；普通姓名和邮箱字段本身并不保证身份真实，可信来源还需要签名等额外验证机制。Git同样无法判断某项设计是否符合项目目标，也不会自动指定谁有权发布下一个正式版本。</p>
+<p>仓库可以有无数条分支，用户口中的“官方版本”却仍要由某套流程选出来。<strong>Git降低了保留异议和复制历史的成本，治理仍要回答哪段历史代表项目。</strong></p>
+<p><img class="article-image-compact" src="https://img.wemd.app/1790260208371_rwl4hx.jpg" alt="分布式版本控制允许多人保存自己的历史，官方发布仍是一条被选择的历史"></p>
+<h2 id="第三站补丁进入等候区">第三站：补丁进入等候区</h2>
+<p>小羽的修改只有两行，维护者为什么还要他补证据？</p>
+<p>真实项目的补丁可能改变接口、性能、安全边界和长期兼容性。一段代码今天能跑，不代表它适合由整个项目在未来几年继续维护。连文档也不是装饰：一条未经验证的安装命令，会把错误交给每个后来者重复一次。</p>
+<p>Linux内核的贡献指南给出了一个具体样本。贡献者要针对合适的源码树准备补丁，说明问题与用户可见影响；若声称提升性能、内存或体积，要提供数字，也要交代代价。不同子系统还可能有自己的流程和维护者树。</p>
+<p>补丁因此不是只交一份答案，还要交一份可以审查的理由。评审者会问：</p>
+<ul>
+<li>问题是否值得解决？</li>
+<li>实现有没有破坏别的平台？</li>
+<li>接口以后能否守住？</li>
+<li>测试覆盖了什么？</li>
+<li>改动是否放错层次？</li>
+<li>谁愿意处理后续故障？</li>
+</ul>
+<p>自动测试能替人排除一批已知错误，却无法穷尽这些判断。测试只检查被写进测试的条件，格式检查也不会决定项目路线。评审的价值之一，就是让没有被机器编码的约束显形。</p>
+<p>这也解释了“正确补丁”为什么可能被拒绝。它可能修复了真实问题，却与正在推进的重构冲突；可能局部更快，却增加了维护成本；也可能方向被接受，但证据、拆分方式或提交位置不合格。拒绝有时意味着“不要这个方案”，有时只是“请按另一种方式再来”。</p>
+<p>当然，评审不会天然公正。含糊规则、长期不回应、对熟人和新人采用不同标准，都可能把质量控制变成权力壁垒。开源没有消除权力，它只是有机会把讨论、记录和分叉暴露在更多人面前。</p>
+<h2 id="第四站谁有权按下合并">第四站：谁有权按下“合并”</h2>
+<p>小羽按要求补充验证，补丁重新回到队列。自动检查还是绿的，但最后那个按钮依然不在他手里。</p>
+<p>不同项目没有同一部宪法。</p>
+<p>有些项目由创始人或首席维护者作最终判断；有些按模块分给不同维护者；有些由公司控制商标、基础设施和发布权限；还有些把权力交给基金会、技术委员会或选举产生的理事会。仓库托管平台也会设置读取、评审、写入、维护和管理等不同权限，能提交拉取请求的人不一定能批准或合并它。</p>
+<p>Apache给出了制度化程度较高的一种方案。贡献者可以提交代码或文档；committer拥有仓库写入权限；项目管理委员会（PMC）作为整体控制项目并批准正式发布。项目以协作和共识为原则，但具体规则仍由各项目制定。</p>
+<p>Python又是另一种结构。2018年，Python接受了PEP 8016提出的指导委员会模式；这份提案目前作为历史文件保留，现行正式治理文件是PEP 13。现行制度设五人指导委员会，赋予其接受或拒绝PEP、执行或更新项目行为规范、与Python软件基金会共同管理项目资产等广泛权力，同时要求尽可能寻找共识，并把权力下放给其他参与者。这不是所有开源项目的模板，只说明一件事：代码采用开放许可，与决策采用何种制度，是两个维度。</p>
+<p>若小羽不接受原项目的决定，许可证可能允许他保留自己的版本，甚至建立分叉项目。分叉是一项重要的退出权，却不是零成本按钮。新项目要重新承担发布、安全修复、用户支持、名称信誉和贡献者协调。代码可以瞬间复制，社区与信任不能。</p>
+<p>所以“谁决定”至少有三层答案：维护者或治理机构决定什么进入上游；许可证决定各方能否继续修改和分发；用户与贡献者决定是否继续跟随这个上游。</p>
+<p><img class="article-image-compact" src="https://img.wemd.app/1790260254373_ltikhd.jpg" alt="开放许可提供行动边界，贡献流程组织证据，治理机构选择官方版本"></p>
+<h2 id="第五站显示已合并之后">第五站：显示“已合并”之后</h2>
+<p>小羽补全两个系统的验证结果，也把修改移到新的文档分支。维护者确认无误，按下合并。页面上的状态从“待评审”变成“已合并”，这份补丁终于抵达主线。</p>
+<p>对项目而言，新的承诺才刚开始。以后安装流程再次改变，这两行文档也要一起更新；翻译、打包和旧版本分支可能需要同步；若说明仍让用户走错路，还要有人回应问题。接受补丁，也是在接受未来的维护责任。</p>
+<p>这些后续工作不一定能从“已合并”状态里看见，资金来源也未必与使用规模匹配。</p>
+<p>Linux基金会2024年全球调查中，在回答“开源贡献的主要资金来源”问题的661名受访者里，50%表示自己的大部分开源贡献没有报酬。这只是贡献资金问题的自陈样本，并非专门抽样的维护者调查，也不能单独证明维护责任集中。它能支持的结论更窄：相当一部分受访者的开源贡献没有获得报酬。</p>
+<p>项目能否持续，因而不只取决于来了多少补丁。清楚的贡献指南、可执行的行为规范、评审轮换、权限交接、自动化测试、资金与组织支持，都会影响评审和维护是否成为瓶颈。</p>
+<p>一个项目如果只允许贡献代码，却没有培养下一批评审者和决策者，开放的入口也可能通向越来越长的队伍。</p>
+<p><strong>开源最稀缺的往往不是下一份代码，而是愿意长期阅读、判断并为结果负责的人。</strong></p>
+<h2 id="当开放来到ai模型">当“开放”来到AI模型</h2>
+<p>今天，类似的混淆又出现在AI领域。一个模型可以提供下载权重，却不公开训练代码；可以公开推理代码，却只给模糊的数据说明；也可以允许研究使用，却限制某些商业用途。它们开放的对象和权利并不相同。</p>
+<p>按照OSI在2024年发布的《开放源代码AI定义》1.0，开放AI系统应允许使用、研究、修改和分享。其“首选修改形式”包括足够详细的训练数据信息、完整的训练与运行代码，以及模型参数；“训练数据信息”并不等于一律公开全部原始训练数据。该定义还明确指出，仅谈“开放模型”或“开放权重”时，也不能因此省掉生成这些参数所需的数据说明和代码。</p>
+<p>这是OSI给出的判定框架，不等于所有研究者、企业和监管者已经对“开放AI”达成统一口径。</p>
+<p>它的价值在于逼我们逐项追问：开放的是代码、权重、数据本身，还是数据来源与处理信息？允许的是下载、商用、修改，还是重新分发？谁又决定下一个官方模型如何训练和发布？</p>
+<p>AI让生成补丁的速度继续上升，也让治理问题更难绕开。生成代码进入项目之前，仍要满足许可证、来源记录、测试、安全和长期维护要求。Git可以接住更多提交，模型可以写出更多候选，维护者的注意力却不会随之自动增加。</p>
+<p><img class="article-image-compact" src="https://img.wemd.app/1790260281972_egnea1.jpg" alt="可下载权重只是一个部件，不能代替对整个系统开放范围的说明"></p>
+<h2 id="补丁的旅行结束了吗">补丁的旅行结束了吗</h2>
+<p>回看这份两行补丁，开源协作并不是“所有人一起改同一份代码”。它更像一套分层制度：许可证先给参与者使用、研究、修改和分享的空间；版本控制保存并交换彼此的历史；贡献规则把改动变成可以审查的提案；维护者、委员会或理事会选择哪些提案成为官方版本。</p>
+<p>这些层次彼此支持，也彼此不能替代。没有许可，能看见不等于能合法再利用；没有Git一类工具，大规模并行修改会更难整理；没有治理，冲突的补丁不会自己形成路线；没有持续维护，再开放的仓库也可能慢慢停住。</p>
+<p>因此，代码公开以后，决定下一次修改的从来不是某一个按钮。有人提出改变，有人验证证据，有人承担合并后的风险，也有人保留分叉和离开的权利。</p>
+<p>开源真正公开的，不是一个“人人说了算”的承诺，而是一组可以检查、参与、争论，并在必要时另走一条路的规则。</p>
+
+    </article>
+    <!-- license -->
+        <div class="license-wrapper">
+            <p>作者：<a href="http://zzephyrxx.github.io">zzephyrxx</a>
+            <p>链接：<a href="http://zzephyrxx.github.io/2026/09/25/ji-zhu-an-xian-shi-dai-ma-gong-kai-yi-hou-shui-jue-ding-xia-yi-ci-xiu-gai/">http://zzephyrxx.github.io/2026/09/25/ji-zhu-an-xian-shi-dai-ma-gong-kai-yi-hou-shui-jue-ding-xia-yi-ci-xiu-gai/</a>
+            <p>发表日期：<a href="http://zzephyrxx.github.io/2026/09/25/ji-zhu-an-xian-shi-dai-ma-gong-kai-yi-hou-shui-jue-ding-xia-yi-ci-xiu-gai/">September 25th 2026, 10:34:01 am</a>
+            <p>更新日期：<a href="http://zzephyrxx.github.io/2026/09/25/ji-zhu-an-xian-shi-dai-ma-gong-kai-yi-hou-shui-jue-ding-xia-yi-ci-xiu-gai/">October 9th 2026, 10:16:19 am</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2026/10/06/jian-wei-zhi-zhu-yi-pai-shu-zi-ru-he-chuan-guo-shen-jing-wang-luo-cong-ju-zhen-cheng-fa-dao-fei-xian-xing/" title="见微知著 | 一排数字如何穿过神经网络：从矩阵乘法到非线性">
+                    <div class="nextTitle">见微知著 | 一排数字如何穿过神经网络：从矩阵乘法到非线性</div>
+                </a>
+        </li>
+        <li class="previous">
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2026/09/14/ji-zhu-an-xian-shi-dai-ma-yue-xiang-ren-hua-fu-za-xing-qu-liao-na-li/" title="AI技术暗线史 8 | 代码越像人话，复杂性去了哪里">
+                    <div class="prevTitle">AI技术暗线史 8 | 代码越像人话，复杂性去了哪里</div>
+                </a>
+        </li>
+    </ul>
+    <!-- comment -->
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+            
+            
+            
+            <!-- utteranc评论 -->
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+            
+            
+            
+        </div>
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    <!-- Mathjax -->
+            <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script>
+
+</main>
+
+                <!-- profile -->
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+        <div class="social">
+                            <a href="mailto:yurou_z@163.com" class="iconfont-archer email" title="email" ></a>
+                <a href="//github.com/zzephyrxx" class="iconfont-archer github" target="_blank" title="github"></a>
+                <span class="iconfont-archer wechat" title="wechat">
+                    <img class="profile-qr" src="/assets/wechat_qr.png" />
+                </span>
+
+        </div>
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span>
+    <!-- website approve for Chinese user -->
+    <!---->
+    <!-- 不蒜子  -->
+        <div class="busuanzi-container">
+                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+        </div>
+</footer>
+
+        </div>
+        <!-- toc -->
+            <div class="toc-wrapper toc-wrapper-loding" style=    top:50vh;
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%99%E8%A1%A5%E4%B8%81%E5%85%88%E6%A3%80%E6%9F%A5%E8%87%AA%E5%B7%B1%E7%9A%84%E9%80%9A%E8%A1%8C%E8%AF%81"><span class="toc-number">1.</span> <span class="toc-text">第一站：补丁先检查自己的“通行证”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%99git%E4%B8%BA%E8%A1%A5%E4%B8%81%E9%93%BA%E8%B7%AF%E5%8D%B4%E4%B8%8D%E6%9B%BF%E5%AE%83%E9%80%89%E7%BB%88%E7%82%B9"><span class="toc-number">2.</span> <span class="toc-text">第二站：Git为补丁铺路，却不替它选终点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%99%E8%A1%A5%E4%B8%81%E8%BF%9B%E5%85%A5%E7%AD%89%E5%80%99%E5%8C%BA"><span class="toc-number">3.</span> <span class="toc-text">第三站：补丁进入等候区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%99%E8%B0%81%E6%9C%89%E6%9D%83%E6%8C%89%E4%B8%8B%E5%90%88%E5%B9%B6"><span class="toc-number">4.</span> <span class="toc-text">第四站：谁有权按下“合并”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%99%E6%98%BE%E7%A4%BA%E5%B7%B2%E5%90%88%E5%B9%B6%E4%B9%8B%E5%90%8E"><span class="toc-number">5.</span> <span class="toc-text">第五站：显示“已合并”之后</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BD%93%E5%BC%80%E6%94%BE%E6%9D%A5%E5%88%B0ai%E6%A8%A1%E5%9E%8B"><span class="toc-number">6.</span> <span class="toc-text">当“开放”来到AI模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%A5%E4%B8%81%E7%9A%84%E6%97%85%E8%A1%8C%E7%BB%93%E6%9D%9F%E4%BA%86%E5%90%97"><span class="toc-number">7.</span> <span class="toc-text">补丁的旅行结束了吗</span></a></li></ol>
+            </div>
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 19
+        </div>
+        <!-- search  -->
+    </div>
+    <div class="post-archive">
+            <div class="archive-year"> 2026 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/09</span>
+            <a class="archive-post-title" href="/2026/10/09/gao-xing-jie-bi-ren-sheng-zhi-nan-mu-lu-dao-hang/">高性价比人生指南</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/09</span>
+            <a class="archive-post-title" href="/2026/10/09/ke-yan-yu-lun-wen-xie-zuo-zi-yuan-shou-ce/">如何做科研与写论文</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/08</span>
+            <a class="archive-post-title" href="/2026/10/08/jian-wei-zhi-zhu-dang-yi-ge-fen-shu-cheng-wei-fang-xiang-sun-shi-han-shu-ru-he-qian-yin-ai-de-xuan-ze/">见微知著 | 当一个分数成为方向：损失函数如何牵引AI的选择</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/06</span>
+            <a class="archive-post-title" href="/2026/10/06/jian-wei-zhi-zhu-yi-pai-shu-zi-ru-he-chuan-guo-shen-jing-wang-luo-cong-ju-zhen-cheng-fa-dao-fei-xian-xing/">见微知著 | 一排数字如何穿过神经网络：从矩阵乘法到非线性</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span>
+            <a class="archive-post-title" href="/2026/09/25/ji-zhu-an-xian-shi-dai-ma-gong-kai-yi-hou-shui-jue-ding-xia-yi-ci-xiu-gai/">AI技术暗线史 9 | 代码公开以后，谁决定下一次修改</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/14</span>
+            <a class="archive-post-title" href="/2026/09/14/ji-zhu-an-xian-shi-dai-ma-yue-xiang-ren-hua-fu-za-xing-qu-liao-na-li/">AI技术暗线史 8 | 代码越像人话，复杂性去了哪里</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/07</span>
+            <a class="archive-post-title" href="/2026/09/07/ji-zhu-an-xian-shi-cong-dan-ji-dao-yun-ji-suan-kong-zhi-quan-de-zhuan-yi/">AI技术暗线史 7 | 从单机到云计算：控制权的转移</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/26</span>
+            <a class="archive-post-title" href="/2026/05/26/ji-zhu-an-xian-shi-cong-fu-hao-dao-lian-jie-yi-chang-ren-shi-lun-de-an-zhan/">AI技术暗线史 | 从符号到连接：一场认识论的暗战</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/07</span>
+            <a class="archive-post-title" href="/2026/05/07/ji-zhu-an-xian-shi-suan-li-bao-zheng-dang-ji-suan-cheng-ben-jue-ding-ji-zhu-fang-xiang/">AI技术暗线史 | 算力暴政：当计算成本决定技术方向</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/10</span>
+            <a class="archive-post-title" href="/2026/04/10/ai-ji-zhu-an-xian-shi-3-huo-ji-ting-jue-jin-hua-lun-cong-ting-jian-dao-ting-dong-de-ai-jia-gou-chang-zheng/">AI技术暗线史 | 硅基听觉进化论：从'听见'到'听懂'的AI架构长征</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/03</span>
+            <a class="archive-post-title" href="/2026/04/03/2026-nian-yu-yin-ai-qu-shi-gou-jian-wei-lai-jiao-hu-jie-mian/">2026年语音AI趋势：构建未来交互界面</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/28</span>
+            <a class="archive-post-title" href="/2026/03/28/ji-zhu-an-xian-shi-mang-ren-xia-shan-yu-wu-jin-jie-ti-ti-du-xia-jiang-suan-fa-zhong-de-xi-wang-yu-kun-ju/">技术暗线史 | 盲人下山与无尽阶梯：梯度下降算法中的希望与困局</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/01</span>
+            <a class="archive-post-title" href="/2026/03/01/ji-zhu-an-xian-shi-cong-ti-hua-ji-de-kong-dong-dao-transformer-de-zhu-yi-li/">技术暗线史 | 从提花机的孔洞到Transformer的'注意力'</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span>
+            <a class="archive-post-title" href="/2026/02/06/yi-tu-gao-dong-he-wei-zi-hui-gui-fei-zi-hui-gui/">一图搞懂何为自回归/非自回归</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/03</span>
+            <a class="archive-post-title" href="/2026/02/03/huo-ji-sheng-ming-ti-de-ting-jue-ju-jiao-yi-zhu/">硅基生命体的「听觉聚焦」艺术——具身智能机器人如何复刻鸡尾酒会效应</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/27</span>
+            <a class="archive-post-title" href="/2026/01/27/rag-xi-tong-ru-men/">RAG系统入门</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span>
+            <a class="archive-post-title" href="/2026/01/24/mark-tilbury-de-50-tiao-ren-sheng-jian-yi/">Mark Tilbury的50条人生建议</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/24</span>
+            <a class="archive-post-title" href="/2026/01/24/nano-banana-pro-hui-tu-jiao-cheng/">Nano-Banana Pro绘图教程</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span>
+            <a class="archive-post-title" href="/2026/01/23/shi-ban-semidone-ji-jian-zhuo-mian-dai-ban-app/">事半·SemiDone极简桌面代办APP</a>
+        </li>
+            </ul>
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+            <span class="sidebar-tag-name" data-tags="YouTube搬运">
+                <span class="iconfont-archer">&#xe606;</span>
+                YouTube搬运
+            </span>
+            <span class="sidebar-tag-name" data-tags="人生经验">
+                <span class="iconfont-archer">&#xe606;</span>
+                人生经验
+            </span>
+            <span class="sidebar-tag-name" data-tags="搬运">
+                <span class="iconfont-archer">&#xe606;</span>
+                搬运
+            </span>
+            <span class="sidebar-tag-name" data-tags="AI绘图">
+                <span class="iconfont-archer">&#xe606;</span>
+                AI绘图
+            </span>
+            <span class="sidebar-tag-name" data-tags="语音AI">
+                <span class="iconfont-archer">&#xe606;</span>
+                语音AI
+            </span>
+            <span class="sidebar-tag-name" data-tags="人机交互">
+                <span class="iconfont-archer">&#xe606;</span>
+                人机交互
+            </span>
+            <span class="sidebar-tag-name" data-tags="空间听觉">
+                <span class="iconfont-archer">&#xe606;</span>
+                空间听觉
+            </span>
+            <span class="sidebar-tag-name" data-tags="AI技术暗线史">
+                <span class="iconfont-archer">&#xe606;</span>
+                AI技术暗线史
+            </span>
+            <span class="sidebar-tag-name" data-tags="RAG">
+                <span class="iconfont-archer">&#xe606;</span>
+                RAG
+            </span>
+            <span class="sidebar-tag-name" data-tags="AI">
+                <span class="iconfont-archer">&#xe606;</span>
+                AI
+            </span>
+            <span class="sidebar-tag-name" data-tags="大模型">
+                <span class="iconfont-archer">&#xe606;</span>
+                大模型
+            </span>
+            <span class="sidebar-tag-name" data-tags="一图读懂">
+                <span class="iconfont-archer">&#xe606;</span>
+                一图读懂
+            </span>
+            <span class="sidebar-tag-name" data-tags="机器学习">
+                <span class="iconfont-archer">&#xe606;</span>
+                机器学习
+            </span>
+            <span class="sidebar-tag-name" data-tags="SemiDone">
+                <span class="iconfont-archer">&#xe606;</span>
+                SemiDone
+            </span>
+            <span class="sidebar-tag-name" data-tags="软件分享">
+                <span class="iconfont-archer">&#xe606;</span>
+                软件分享
+            </span>
+            <span class="sidebar-tag-name" data-tags="语音技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                语音技术
+            </span>
+            <span class="sidebar-tag-name" data-tags="科研指南">
+                <span class="iconfont-archer">&#xe606;</span>
+                科研指南
+            </span>
+            <span class="sidebar-tag-name" data-tags="论文写作">
+                <span class="iconfont-archer">&#xe606;</span>
+                论文写作
+            </span>
+            <span class="sidebar-tag-name" data-tags="见微知著">
+                <span class="iconfont-archer">&#xe606;</span>
+                见微知著
+            </span>
+            <span class="sidebar-tag-name" data-tags="AI安全">
+                <span class="iconfont-archer">&#xe606;</span>
+                AI安全
+            </span>
+            <span class="sidebar-tag-name" data-tags="神经网络">
+                <span class="iconfont-archer">&#xe606;</span>
+                神经网络
+            </span>
+            <span class="sidebar-tag-name" data-tags="生活指南">
+                <span class="iconfont-archer">&#xe606;</span>
+                生活指南
+            </span>
+            <span class="sidebar-tag-name" data-tags="资源导航">
+                <span class="iconfont-archer">&#xe606;</span>
+                资源导航
+            </span>
+            <span class="sidebar-tag-name" data-tags="编程语言">
+                <span class="iconfont-archer">&#xe606;</span>
+                编程语言
+            </span>
+            <span class="sidebar-tag-name" data-tags="开源">
+                <span class="iconfont-archer">&#xe606;</span>
+                开源
+            </span>
+            <span class="sidebar-tag-name" data-tags="云计算">
+                <span class="iconfont-archer">&#xe606;</span>
+                云计算
+            </span>
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+        <span class="sidebar-category-name" data-categories="实用软件">
+            <span class="iconfont-archer">&#xe60a;</span>
+            实用软件
+        </span>
+        <span class="sidebar-category-name" data-categories="RAG">
+            <span class="iconfont-archer">&#xe60a;</span>
+            RAG
+        </span>
+        <span class="sidebar-category-name" data-categories="AI技术暗线史">
+            <span class="iconfont-archer">&#xe60a;</span>
+            AI技术暗线史
+        </span>
+        <span class="sidebar-category-name" data-categories="AI绘图">
+            <span class="iconfont-archer">&#xe60a;</span>
+            AI绘图
+        </span>
+        <span class="sidebar-category-name" data-categories="语音AI">
+            <span class="iconfont-archer">&#xe60a;</span>
+            语音AI
+        </span>
+        <span class="sidebar-category-name" data-categories="人生经验">
+            <span class="iconfont-archer">&#xe60a;</span>
+            人生经验
+        </span>
+        <span class="sidebar-category-name" data-categories="一图读懂">
+            <span class="iconfont-archer">&#xe60a;</span>
+            一图读懂
+        </span>
+        <span class="sidebar-category-name" data-categories="语音技术">
+            <span class="iconfont-archer">&#xe60a;</span>
+            语音技术
+        </span>
+        <span class="sidebar-category-name" data-categories="见微知著">
+            <span class="iconfont-archer">&#xe60a;</span>
+            见微知著
+        </span>
+        <span class="sidebar-category-name" data-categories="科研指南">
+            <span class="iconfont-archer">&#xe60a;</span>
+            科研指南
+        </span>
+        <span class="sidebar-category-name" data-categories="生活指南">
+            <span class="iconfont-archer">&#xe60a;</span>
+            生活指南
+        </span>
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "http://zzephyrxx.github.io",
+        root: siteMetaRoot,
+        author: "zzephyrxx"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+        <!-- main func -->
+        <script src="/scripts/main.js"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js" onload="window.Fancybox.bind('[data-fancybox]')" defer></script>
+        <!-- algolia -->
+        <!-- busuanzi -->
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        <!-- async load share.js -->
+            <script src="/scripts/share.js" async></script>
+        <!-- mermaid -->
+            <script src='https://cdn.jsdelivr.net/npm/mermaid@10.4.0/dist/mermaid.min.js' defer></script>
+            <script src='/scripts/custom-mermaid.js' defer></script>
+        <!-- Code Block Beautification -->
+        <script src="/lib/codeBlock/codeBlockFuction.js"></script>
+        <script src="/lib/codeBlock/codeBLang.js"></script>
+        <script src="/lib/codeBlock/clipboard.min.js"></script>
+        <script src="/lib/codeBlock/codeCopy.js"></script>
+        <script src="/js/hexo_resize_image.js"></script>
+    </body>
+</html>
