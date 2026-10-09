@@ -2,7 +2,8 @@
 
 /* ===== Beautiful Table Styling ===== */
 .article-entry table {
-  width: 100%;
+  width: auto;
+  max-width: 100%;
   border-collapse: separate;
   border-spacing: 0;
   border-radius: 8px;
@@ -227,3 +228,78 @@
   height: auto;
   max-width: 100%;
 }
+
+/* SemiDone legacy GIFs: compact multi-column gallery on wide screens. */
+.article-entry .semidone-legacy-gifs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+  margin: 1.5rem 0;
+}
+
+.article-entry .semidone-legacy-gifs figure {
+  flex: 1 1 calc((100% - 2rem) / 3);
+  width: calc((100% - 2rem) / 3);
+  max-width: 35%;
+  min-width: 0;
+  margin: 0;
+}
+
+.article-entry .semidone-legacy-gifs img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+.article-entry .semidone-legacy-gifs figcaption {
+  margin-top: 0.45rem;
+}
+
+.article-entry .semidone-chicken-leg {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+}
+
+.article-entry .semidone-chicken-leg-button {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  font: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.article-entry .semidone-chicken-leg-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
+
+.article-entry .semidone-chicken-leg-count {
+  color: #777;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 700px) {
+  .article-entry .semidone-legacy-gifs figure {
+    flex-basis: calc((100% - 1rem) / 2);
+    width: calc((100% - 1rem) / 2);
+    max-width: 48%;
+  }
+}
+
+@media (max-width: 480px) {
+  .article-entry .semidone-legacy-gifs figure {
+    flex-basis: 100%;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+
