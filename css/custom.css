@@ -220,3 +220,10 @@
   justify-content: center;
   margin: 1.5em 0;
 }
+
+/* Compact illustrations in migrated WeChat posts */
+.article-entry img.article-image-compact {
+  width: 60%;
+  height: auto;
+  max-width: 100%;
+}

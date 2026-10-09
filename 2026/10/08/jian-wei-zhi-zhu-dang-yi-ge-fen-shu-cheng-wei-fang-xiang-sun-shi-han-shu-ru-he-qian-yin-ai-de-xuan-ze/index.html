@@ -10,17 +10,26 @@
     <meta name="copyright" content="zzephyrxx">
         <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
     <meta name="description" content="">
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://zzephyrxx.github.io/tags/%E8%BD%AF%E4%BB%B6%E5%88%86%E4%BA%AB/index.html">
+    <meta name="description" content="预计阅读时长：约 12 分钟  一个推荐系统把点击率做得特别高，它就真的更“懂”用户了吗？ 假设这有两篇文章，每篇都获得 100 次展示。    编号 标题 点击量 读完人数 满意回访人数     A 7天学会AI，普通人也能逆袭 18 3 1   B 一次矩阵计算到底做了什么 10 8 7    现在，给推荐模型发一张极其干脆的评">
+<meta property="og:type" content="article">
+<meta property="og:title" content="见微知著 | 当一个分数成为方向：损失函数如何牵引AI的选择">
+<meta property="og:url" content="http://zzephyrxx.github.io/2026/10/08/jian-wei-zhi-zhu-dang-yi-ge-fen-shu-cheng-wei-fang-xiang-sun-shi-han-shu-ru-he-qian-yin-ai-de-xuan-ze/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="预计阅读时长：约 12 分钟  一个推荐系统把点击率做得特别高，它就真的更“懂”用户了吗？ 假设这有两篇文章，每篇都获得 100 次展示。    编号 标题 点击量 读完人数 满意回访人数     A 7天学会AI，普通人也能逆袭 18 3 1   B 一次矩阵计算到底做了什么 10 8 7    现在，给推荐模型发一张极其干脆的评">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zzephyrxx.github.io/2026/10/08/jian-wei-zhi-zhu-dang-yi-ge-fen-shu-cheng-wei-fang-xiang-sun-shi-han-shu-ru-he-qian-yin-ai-de-xuan-ze/fm1.png">
+<meta property="article:published_time" content="2026-10-08T06:34:01.000Z">
+<meta property="article:modified_time" content="2026-10-09T02:07:50.031Z">
 <meta property="article:author" content="zzephyrxx">
+<meta property="article:tag" content="AI安全">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="见微知著">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://zzephyrxx.github.io/2026/10/08/jian-wei-zhi-zhu-dang-yi-ge-fen-shu-cheng-wei-fang-xiang-sun-shi-han-shu-ru-he-qian-yin-ai-de-xuan-ze/fm1.png">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link rel="icon" href="/assets/favicon.ico">
-    <title>zzephyrxx&#39;s Studio</title>
+    <title>见微知著 | 当一个分数成为方向：损失函数如何牵引AI的选择 · zzephyrxx&#39;s Studio</title>
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
 - testing support for link[rel=preload]
@@ -210,6 +219,7 @@
             document.write('<script src="/lib/jquery.min.js"><\/script>')
         }
     </script>
+        <body class="post-body">
         <!-- header -->
         <header class="header header-mobile">
     <!-- top read progress line -->
@@ -239,7 +249,7 @@
             <a href="/">zzephyrxx&#39;s Studio.</a>
         </div>
         <div class="post-title header-element">
-            <a href="#" class="post-name"></a>
+            <a href="#" class="post-name">见微知著 | 当一个分数成为方向：损失函数如何牵引AI的选择</a>
         </div>
     </div>
 </header>
@@ -256,20 +266,62 @@
 
         <!-- wrapper -->
         <div class="wrapper">
-            <div class="site-intro" style="">
+            <div class="site-intro" style="    height:50vh;
+">
     <!-- 主页  -->
+    <!-- 404页  -->
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.png)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
+                见微知著 | 当一个分数成为方向：损失函数如何牵引AI的选择
+            <!-- 404 -->
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
+            <!-- 404 -->
         </p>
         <!-- 文章页 meta -->
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                    <div class="post-intro-tags" >
+        <a class="post-tag" href="javascript:void(0);" data-tags="机器学习">机器学习</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="见微知著">见微知著</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="AI安全">AI安全</a>
+</div>
+
+                <!-- 文章字数统计 -->
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">2.8k</span>阅读时长: <span class="post-count reading-time">9 min</span></span>
+                    </div>
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2026/10/08</span>
+                    <!-- busuanzi -->
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
     </div>
 </div>
 
@@ -398,31 +450,284 @@
 
             <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" alt="loading">
             <div class="container container-unloaded">
-                <main class="main index-page">
-        <article class="index-post">
-            <a class="abstract-title" href="/2026/01/23/shi-ban-semidone-ji-jian-zhuo-mian-dai-ban-app/">
-                    <span class="iconfont-archer stick-top">&#xe63d;</span>
-                <span class="abstract-title-text">事半·SemiDone极简桌面代办APP</span>
-            </a>
-            <div class="abstract-content">
-                一款专为 Windows 用户设计的轻量级桌面待办应用
-            </div>
-            <!-- read more -->
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2026/04/03">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2026/01/23</span>
-                </div>
-                <!-- tags -->
-                    <div class="abstract-tags" >
-        <a class="post-tag" href="javascript:void(0);" data-tags="SemiDone">SemiDone</a>
-        <a class="post-tag" href="javascript:void(0);" data-tags="软件分享">软件分享</a>
-</div>
+                <main class="main post-page">
+    <article class="article-entry">
+        <span id="more"></span>
+<p><em>预计阅读时长：约 12 分钟</em></p>
+<hr />
+<p>一个推荐系统把点击率做得特别高，它就真的更“懂”用户了吗？</p>
+<p>假设这有两篇文章，每篇都获得 100 次展示。</p>
+<table>
+<thead>
+<tr class="header">
+<th>编号</th>
+<th>标题</th>
+<th style="text-align: right;">点击量</th>
+<th style="text-align: right;">读完人数</th>
+<th style="text-align: right;">满意回访人数</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline"><em>A</em></span></td>
+<td>7天学会AI，普通人也能逆袭</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td><span class="math inline"><em>B</em></span></td>
+<td>一次矩阵计算到底做了什么</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">7</td>
+</tr>
+</tbody>
+</table>
+<p>现在，给推荐模型发一张极其干脆的评分表。</p>
+<blockquote>
+<p>有人点击，记 1 分。没人点击，记 0 分。</p>
+</blockquote>
+<p>照这张表计分。</p>
+<p><span class="math inline"><em>A</em></span> 得 18 分，<span class="math inline"><em>B</em></span> 得 10 分。<span class="math inline"><em>A</em></span> 赢得毫无悬念。</p>
+<p>可顺着表格往右再看两列，味道就不太对了。点进 <span class="math inline"><em>A</em></span> 的人很多，但读完的很少，愿意在回访里表示满意的更少。<span class="math inline"><em>B</em></span> 的开头没有那么会勾人，而进去的人却更愿意看完。</p>
+<p>点击率赢了。</p>
+<p>用户体验可能已经输了。</p>
+<p>尴尬也在这里出现。</p>
+<p>模型做错了吗？</p>
+<p>坦率地讲，在这张评分表里，它做得完全正确。我们只给点击发 “奖金”，它当然会寻找最容易带来点击的标题、封面、题材和摆放位置。模型没有在心里盘算怎么骗用户，仅是沿着分数更高的方向调整参数而已。</p>
+<p><img class="article-image-compact" src="fm1.png" alt="推荐系统评分表的信息图"></p>
+<p>这里到<strong>损失函数</strong>登场的时候了。</p>
+<p>这名字听着有点唬人，好像真的在失去什么。它做的事却很具体：比较模型“猜”的答案和数据给出的答案，算出它们差了多少。</p>
+<p>放到点击预测里，模型会给每篇内容一个点击概率。比如它猜某个用户有 80% 的可能点击，结果用户没有点，这次预测就该被罚得重一点。常见的<strong>二元交叉熵</strong>可以写成：</p>
+<p><span class="math display"><em>L</em> =  − [<em>y</em>log (<em>p</em>) + (1 − <em>y</em>)log (1 − <em>p</em>)]</span></p>
+<p><span class="math inline"><em>p</em></span> 是模型给出的点击概率，<span class="math inline"><em>y</em></span> 是结果标签，点击为 1，没点为 0。<span class="math inline">log </span> 取自然对数。</p>
+<p>损失 <span class="math inline"><em>L</em></span> 越小，说明模型给出的概率在这批标签上受到的惩罚越小。<strong>梯度下降</strong>会计算损失随参数怎样变化，再沿着能让损失下降的方向改参数。</p>
+<p>如果读过上一篇矩阵乘法，可以把两篇连起来看。矩阵里的权重到底往哪边改，需要一个评价当前答案好坏的数字。<strong>损失函数</strong>就是训练时给出这个数字的<strong>规则</strong>。</p>
+<p><strong>损失函数只对标签负责。</strong></p>
+<p>若标签只记录点还是没点，它就看不到用户点进去后有没有后悔，更看不到用户是不是被标题骗了一次，随后连续三天都不想再打开这个产品。</p>
+<p>这里的“损失”只是数学上的<strong>惩罚分</strong>。机器没有疼痛，也没有失望。至于什么行为该罚、罚多少，要由人先写进任务。</p>
+<p>这块有三个经常被混在一起的东西，最好一次拆开。</p>
+<table>
+<thead>
+<tr class="header">
+<th>名称</th>
+<th>在回答什么</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>训练损失</strong></td>
+<td>这一批预测错了多少</td>
+<td>点击概率和点击标签的交叉熵</td>
+</tr>
+<tr class="even">
+<td><strong>评价指标</strong></td>
+<td>训练完的模型整体表现如何</td>
+<td>准确率、排序质量、分群错误率</td>
+</tr>
+<tr class="odd">
+<td><strong>产品目标</strong></td>
+<td>人们最后获得了什么</td>
+<td>满意、信任、愿意回来</td>
+</tr>
+</tbody>
+</table>
+<p>训练损失要能频繁计算，还得方便优化；评价指标负责比较版本，未必直接参与每一步梯度更新；产品目标最接近我们真正关心的结果，却往往最难及时测量。</p>
+<p>一个人点没点，能马上记下。</p>
+<p>一周后用户还信不信这个平台，很难立刻变成标签。</p>
+<p>这是整个问题里最磨人的地方。容易测的东西来得快，真正重要的东西来得慢。工程团队不能每天等半年以后再训练一次，只能先找代理指标。</p>
+<p>给评分表多加几列，行不行？</p>
+<p>行，而且现实里的大型推荐系统确实会同时处理多个目标。<em>Google</em> 研究团队在 2019 年介绍过一套视频推荐排序系统，论文写到多种排序目标彼此竞争，也提到用户反馈中的选择偏差。他们用多任务方法同时处理多个目标，并在实验中观察参与度与满意度指标。</p>
+<p>所以，我们把评分表改一下。</p>
+<blockquote>
+<p>点击记 1 分，读完记 2 分，满意回访记 4 分。</p>
+</blockquote>
+<p>重新计算。</p>
+<table>
+<thead>
+<tr class="header">
+<th>编号</th>
+<th style="text-align: right;">点击得分</th>
+<th style="text-align: right;">读完得分</th>
+<th style="text-align: right;">满意得分</th>
+<th style="text-align: right;">总分</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline"><em>A</em></span></td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="even">
+<td><span class="math inline"><em>B</em></span></td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">54</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline"><em>B</em></span> 反超了。</p>
+<p>看起来舒服多了，但先别急。</p>
+<p>若不校正内容长度等差异，直接横向比较完读率，短内容往往更容易占便宜。一段 15 秒的视频很容易播完，一场 40 分钟的访谈缺很难。停留时长也不总等于喜欢，有人可能看得入迷，也可能单纯没看懂，来回拖了三遍。满意度问卷虽直接，然填写的人只占一部分，他们与沉默的用户的想法可能并不相同，而且容易产生<strong>幸存者偏差</strong>。</p>
+<p>指标多了，麻烦没有消失，只是从“有没有指标”变成“这些指标如何取舍”。</p>
+<p>其实更麻烦的还在数据本身。</p>
+<p>用户只能点击自己看见过的东西。排在第一位的内容天然更容易被看到，也更容易获得点击。<em>Joachims</em> 等人在学习排序研究中专门讨论了这种位置偏差。直接把点击当作相关性标签，训练数据会同时装进用户偏好和系统过去的展示方式。</p>
+<p>这很像一场有点离谱的考试。</p>
+<p>老师先把 <span class="math inline"><em>A</em></span> 放到第一排，<span class="math inline"><em>B</em></span> 塞到角落。考试结束以后，又拿收到的掌声证明 <span class="math inline"><em>A</em></span> 更受欢迎。</p>
+<p>然后下一轮，<span class="math inline"><em>A</em></span> 继续坐第一排。</p>
+<p>模型会同时学到用户喜欢什么，以及系统以前让用户看见了什么。这个问题不能全抛给损失函数。曝光策略、采样方式、标签定义和反馈回路都会参与。</p>
+<p>再把场景从推荐换到分类，另一个盲区会更明显。</p>
+<p>假设测试集里有 1000 个人，<span class="math inline"><em>A</em></span> 组 950 人，<span class="math inline"><em>B</em></span> 组 50 人。一个模型把 <span class="math inline"><em>A</em></span> 组全部判断正确，却把 <span class="math inline"><em>B</em></span> 组全部判断错误。</p>
+<table>
+<thead>
+<tr class="header">
+<th>群体</th>
+<th style="text-align: right;">人数</th>
+<th style="text-align: right;">判断正确</th>
+<th style="text-align: right;">组内准确率</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline"><em>A</em></span> 组</td>
+<td style="text-align: right;">950</td>
+<td style="text-align: right;">950</td>
+<td style="text-align: right;">100%</td>
+</tr>
+<tr class="even">
+<td><span class="math inline"><em>B</em></span> 组</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr class="odd">
+<td>全体</td>
+<td style="text-align: right;">1000</td>
+<td style="text-align: right;">950</td>
+<td style="text-align: right;">95%</td>
+</tr>
+</tbody>
+</table>
+<p>总准确率 “高达” 95%。</p>
+<p>单看这个数字，甚至挺漂亮。</p>
+<p>相信你应该已经看出来了，有 50 个人被这张总成绩单完整地藏了起来。<em>Hard</em>t、<em>Price</em> 与 <em>Srebro</em> 在公平机器学习研究中讨论了群体间错误分配的问题，并提出<strong>机会均等</strong>等判据。具体采用哪种公平定义还要看任务，公平指标之间仍可能冲突。这里至少能确认一件事，整体准确率高，不能自动推出每个群体都被同样对待。</p>
+<p>这话听着有点刺耳，但一个指标从来不会替我们完成价值判断。</p>
+<p>准确率会数对错，却不会自己决定哪一种错更贵。推荐漏掉一篇普通文章，和医疗筛查漏掉一个真正患病的人，公式里的错误都可以写成 <span class="math inline">0</span> 或 <span class="math inline">1</span>，现实后果却完全不同。</p>
+<p>AI 安全研究里有一个相邻概念叫 <em>reward hacking</em>（奖励黑客）。系统找到一条能拿到高奖励的路，却没有完成设计者真正想要的事。2016 年的《Concrete Problems in AI Safety》把错误目标与奖励钻空子列入具体安全问题。</p>
+<p>回到开头那篇“7天学会AI，普通人也能逆袭”。</p>
+<p>它拿走了点击冠军，算不上模型突然长出了坏心眼。评分表把点击放在了最亮眼的位置，其他体验没有进账。模型沿着那束光跑得越快，离完整目标反而可能越远。</p>
+<p>这个现象其实比机器学习早得多。社会科学家 <em>Donald Campbell</em> 在 1979 年讨论社会指标时就提醒过：量化指标越深地卷入决策，越容易承受被扭曲的压力，也可能反过来扭曲它原本要观察的过程。</p>
+<p>在考场、客服中心和推荐页上，计分方式都会改变下一步的动作。客服只奖通话量，复杂问题容易变成烫手山芋；推荐只奖点击，标题就会越来越会抓手指。</p>
+<p>这就是一张 “评分表” 的力量。</p>
+<p>看起来只是一列列数字，背后却在分配注意力、机会和成本。</p>
+<p>那么一张更靠谱的评分表，应该长什么样？</p>
+<p>我不觉得存在一张永远正确的万能表。真要给开头的例子写一份修订说明，我会改成这样：</p>
+<table>
+<thead>
+<tr class="header">
+<th>信号</th>
+<th>在评分中的位置</th>
+<th>须盯住的盲区</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>点击</td>
+<td>发现兴趣的早期信号</td>
+<td>标题与位置会影响它</td>
+</tr>
+<tr class="even">
+<td>有效阅读</td>
+<td>判断内容是否被真正消费</td>
+<td>长短内容不能粗暴比较</td>
+</tr>
+<tr class="odd">
+<td>满意反馈</td>
+<td>直接询问体验</td>
+<td>回答者可能有选择偏差</td>
+</tr>
+<tr class="even">
+<td>长期留存</td>
+<td>检查短期刺激有没有透支信任</td>
+<td>反馈慢，归因困难</td>
+</tr>
+<tr class="odd">
+<td>群体表现</td>
+<td>检查错误落在谁身上</td>
+<td>公平定义依赖具体任务</td>
+</tr>
+</tbody>
+</table>
+<p>没有在这里写一条神奇的总分公式。</p>
+<p>因为权重设成多少，需要实验、监测与真实业务条件。更重要的是，团队要把那些没被分数收进去的东西继续放在桌面上。用户投诉、内容多样性、创作者处境、极端失败案例，这些材料未必都能塞进一个小数点后四位的分数。</p>
+<p>损失函数固然重要。没有它，模型不知道参数该往哪里改。可当分数成了唯一要赢的东西，我们得回头问一句：它原本想帮我们看见什么？</p>
+<p>期末卷面满分，能说明这张卷子答得好；换一道题还会不会做，得另试。微信步数几万，数字也说不清这一天有没有真正走出去。朋友圈攒下上百个赞，那条动态是否写了自己想说的话，得自己回答。</p>
+<p>点击率亦是如此。记下谁点进来，却没记下读者离开时带走了什么。开头的 <span class="math inline"><em>A</em></span> 赢在计分规则里；读完、满意，以及下次还愿不愿意来，仍需持续观察。</p>
+<p>写文章时，我也会看阅读量，自然希望阅读量更高。但一处解释若是还没讲清，即使没人打分，我也愿意回头查，自己还能多学一些东西。比起把那个数字再往上推一点，这更接近我当初想做的事。</p>
+<hr />
+<p>在 AI 大步 “入侵” 的时代，希望我们都尽快能跟上脚步，至少不能掉队太多。将那些曾异想天开、遥不可及的想法一步步变为现实，或许就是我们对这个时代最好的回应。</p>
 
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    <!-- paginator  -->
+    </article>
+    <!-- license -->
+        <div class="license-wrapper">
+            <p>作者：<a href="http://zzephyrxx.github.io">zzephyrxx</a>
+            <p>链接：<a href="http://zzephyrxx.github.io/2026/10/08/jian-wei-zhi-zhu-dang-yi-ge-fen-shu-cheng-wei-fang-xiang-sun-shi-han-shu-ru-he-qian-yin-ai-de-xuan-ze/">http://zzephyrxx.github.io/2026/10/08/jian-wei-zhi-zhu-dang-yi-ge-fen-shu-cheng-wei-fang-xiang-sun-shi-han-shu-ru-he-qian-yin-ai-de-xuan-ze/</a>
+            <p>发表日期：<a href="http://zzephyrxx.github.io/2026/10/08/jian-wei-zhi-zhu-dang-yi-ge-fen-shu-cheng-wei-fang-xiang-sun-shi-han-shu-ru-he-qian-yin-ai-de-xuan-ze/">October 8th 2026, 2:34:01 pm</a>
+            <p>更新日期：<a href="http://zzephyrxx.github.io/2026/10/08/jian-wei-zhi-zhu-dang-yi-ge-fen-shu-cheng-wei-fang-xiang-sun-shi-han-shu-ru-he-qian-yin-ai-de-xuan-ze/">October 9th 2026, 10:07:50 am</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2026/10/09/ke-yan-yu-lun-wen-xie-zuo-zi-yuan-shou-ce/" title="如何做科研与写论文：资源手册">
+                    <div class="nextTitle">如何做科研与写论文：资源手册</div>
+                </a>
+        </li>
+        <li class="previous">
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2026/10/06/jian-wei-zhi-zhu-yi-pai-shu-zi-ru-he-chuan-guo-shen-jing-wang-luo-cong-ju-zhen-cheng-fa-dao-fei-xian-xing/" title="见微知著 | 一排数字如何穿过神经网络：从矩阵乘法到非线性">
+                    <div class="prevTitle">见微知著 | 一排数字如何穿过神经网络：从矩阵乘法到非线性</div>
+                </a>
+        </li>
+    </ul>
+    <!-- comment -->
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+            
+            
+            
+            <!-- utteranc评论 -->
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+            
+            
+            
+        </div>
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    <!-- Mathjax -->
+            <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script>
+
 </main>
 
                 <!-- profile -->
@@ -450,6 +755,13 @@
 
         </div>
         <!-- toc -->
+            <div class="toc-wrapper toc-wrapper-loding" style=    top:50vh;
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                
+            </div>
         <!-- sidebar -->
         <div class="sidebar sidebar-hide">
     <ul class="sidebar-tabs sidebar-tabs-active-0">
@@ -680,7 +992,10 @@
         <!-- busuanzi -->
             <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
         <!-- async load share.js -->
+            <script src="/scripts/share.js" async></script>
         <!-- mermaid -->
+            <script src='https://cdn.jsdelivr.net/npm/mermaid@10.4.0/dist/mermaid.min.js' defer></script>
+            <script src='/scripts/custom-mermaid.js' defer></script>
         <!-- Code Block Beautification -->
         <script src="/lib/codeBlock/codeBlockFuction.js"></script>
         <script src="/lib/codeBlock/codeBLang.js"></script>
